@@ -1,0 +1,45 @@
+data_type,parameter_id,source_address,start_byte,start_bit,bit_length,endianness,error_value,resolution,offset,min,max,units,type,label
+0,65248,0,4,0,32,0,4294967295,0.077671375,0,,,miles,Odometer,Odometer (Engine)
+0,65248,23,4,0,32,0,4294967295,0.077671375,0,,,miles,Odometer,Odometer (Instrument Cluster)
+0,65217,0,0,0,32,0,4294967295,0.003106855,0,,,miles,Odometer,Odometer - High Res (Instrument Cluster)
+0,65217,23,0,0,32,0,4294967295,0.003106855,0,,,miles,Odometer,Odometer - High Res (Engine)
+0,65265,0,1,0,16,0,65535,0.002485484,0,0,150,mph,Speed,Speed (Engine)
+0,65265,17,1,0,16,0,65535,0.002485484,0,0,150,mph,Speed,Speed (Cruise Control)
+0,65265,23,1,0,16,0,65535,0.002485484,0,0,150,mph,Speed,Speed (Instrument Cluster)
+0,65215,11,1,0,16,0,65535,0.002485484,0,0,150,mph,Speed,Speed (Brakes System Controller - Axle Based)
+0,65257,0,4,0,32,0,4294967295,0.132086,0,,,gallons,Total Engine Fuel Used,Total Engine Fuel Used
+0,65253,0,0,0,32,0,4294967295,0.05,0,,,hrs,Total Engine Hours,Total Engine Hours
+0,65262,0,0,0,8,1,255,1.8,-40,-40,300,F,Coolant Temperature,Coolant Temperature
+0,65262,0,2,0,16,0,65535,0.05625,-459.4,-100,300,F,Oil Temperature,Oil Temperature
+0,65263,0,3,0,8,1,255,0.580152,0,0,140,psi,Oil Pressure,Oil Pressure
+0,65263,0,7,0,8,1,255,0.4,0,0,100,%,Coolant Level,Coolant Level
+0,65276,0,1,0,8,1,255,0.4,0,0,100,%,Fuel Level %,Fuel Level %
+0,65276,33,1,0,8,1,255,0.4,0,0,100,%,Fuel Level %,Fuel Level % (Body Controller)
+0,61444,0,3,0,16,0,65535,0.125,0,0,8000,rpm,Engine RPM,Engine RPM
+0,65110,0,0,0,8,1,255,0.4,0,0,100,%,Diesel Level,Diesel Level
+1,245,128,0,0,32,1,4294967295,0.100040731,0,,,miles,Odometer,Odometer (Engine - j1708)
+1,245,140,0,0,32,1,4294967295,0.100040731,0,,,miles,Odometer,Odometer (Instrument Cluster - j1708)
+1,245,142,0,0,32,1,4294967295,0.100040731,0,,,miles,Odometer,Odometer (Vehicle Management System - j1708)
+1,84,128,0,0,8,0,255,0.500203655,0,0,127,mph,Speed,Speed (Engine - j1708)
+1,84,136,0,0,8,0,255,0.500203655,0,0,127,mph,Speed,Speed (Brakes Power Unit - j1708)
+1,84,142,0,0,8,0,255,0.500203655,0,0,127,mph,Speed,Speed (Vehicle Management System - j1708)
+1,84,144,0,0,8,0,255,0.500203655,0,0,127,mph,Speed,Speed (Cruise Control - j1708)
+1,250,128,0,0,32,0,4294967295,0.124953356,0,,,gallons,Total Fuel Used,Total Fuel Used (j1708)
+1,247,128,0,0,32,0,4294967295,0.05,0,,,hrs,Total Engine Hours,Total Engine Hours (j1708)
+1,110,128,0,0,8,0,255,1,0,0,254,F,Coolant Temperature,Coolant Temperature (j1708)
+1,175,128,0,0,16,0,65535,0.25,-8192,-100,300,F,Oil Temperature,Oil Temperature (j1708)
+1,100,128,0,0,8,0,255,0.5003811,0,0,127,psi,Oil Pressure,Oil Pressure (j1708)
+1,111,128,0,0,8,0,255,0.5,0,0,100,%,Coolant Level,Coolant Level (j1708)
+1,96,128,0,0,8,0,255,0.5,0,0,100,%,Fuel Level %,Fuel Level % (j1708)
+1,190,128,0,0,16,0,65535,0.25,0,0,8000,rpm,Engine RPM,Engine RPM (j1708)
+1,237,128,0,0,136,1,0,1,0,,,string,VIN,VIN (j1708)
+2,1,0,0,0,32,1,4294967295,0.0223694,0,0,150,mph,Speed,Speed (Engine)
+2,1,0,4,0,32,1,0,1,0,,,miles,Trip Odometer,Calculated Trip Odometer
+2,1,0,8,0,32,1,4294967295,0.1,0,0,8000,rpm,Engine RPM,Engine RPM
+2,1,0,12,0,32,1,0,0.01,0,0,100,%,Fuel Level %,Fuel Level %
+2,1,0,16,0,32,1,4294967295,0.000264172,0,,,gallons,Trip Fuel Consumption,Trip Fuel Consumption
+2,1,0,20,0,32,1,0,0.1125,32,32,300,F,Coolant Temperature,Coolant Temperature
+2,1,0,24,0,32,1,0,0.000264172,0,0,100,gallons,Fuel Level,Fuel Level
+2,1,0,28,0,32,1,0,0.000621371,0,,,miles,Odometer,Odometer (Engine)
+2,1,0,32,0,32,1,0,0.05,0,,,hrs,Total Engine Hours,Total Engine Hours
+2,1,0,36,0,32,1,4294967295,0.000264172,0,0,20,gallons/h,Fuel Rate,Fuel Rate
