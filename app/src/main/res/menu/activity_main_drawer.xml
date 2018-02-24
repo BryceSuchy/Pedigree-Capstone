@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:id="@+id/add_preset"
+            android:icon="@drawable/ic_add_box_black_24px"
+            android:title="Add Preset" />
+        <group >
+            <item android:title="Preset 1" />
+            <item android:title="Preset 2" />
+        </group>
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:id="@+id/delete_preset"
+            android:icon="@drawable/ic_delete_black_24px"
+            android:title="Delete Preset" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/upload_csv"
+            android:icon="@drawable/ic_file_upload_black_24px"
+            android:title="Upload CSV" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Displays">
         <menu>
             <item
                 android:id="@+id/nav_share"
@@ -32,6 +33,14 @@
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
                 android:title="Send" />
+            <item
+                android:id="@+id/app_bar_switch1"
+                android:title="Metric 1"
+                app:actionLayout="@layout/switch_item" />
+            <item
+                android:id="@+id/app_bar_switch2"
+                android:title="Metric 2"
+                app:actionLayout="@layout/switch_item" ></item>
         </menu>
     </item>
 
