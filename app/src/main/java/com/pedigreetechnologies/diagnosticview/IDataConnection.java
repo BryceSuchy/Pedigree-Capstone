@@ -5,5 +5,5 @@ package com.pedigreetechnologies.diagnosticview;
  */
 
 public interface IDataConnection {
-    public SensorMessage readMessage();
+    SensorMessage readMessage();
 }

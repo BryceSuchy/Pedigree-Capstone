@@ -2,4 +2,8 @@
     <string name="app_name">DiagnosticView</string>
     <string name="diagnostic_select">Select the data to view:</string>
     <string name="button_text">Go</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>
