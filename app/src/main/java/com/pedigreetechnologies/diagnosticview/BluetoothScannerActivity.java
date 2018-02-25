@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,16 +31,19 @@ public class BluetoothScannerActivity extends AppCompatActivity {
     private BluetoothAdapter bluetoothAdapter;
     private DeviceAdapter deviceAdapter;
     private boolean isReceiverRegistered = false;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_scanner);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         //Adding test bluetooth device to access the test data
         deviceList.add(new SBluetoothDevice("Test Device", "00:00:00:00:00:00"));
 
-        deviceListView = (ListView) findViewById(R.id.listView);
+        deviceListView = findViewById(R.id.listView);
         deviceAdapter = new DeviceAdapter(this, deviceList);
         deviceListView.setAdapter(deviceAdapter);
 
@@ -170,10 +174,10 @@ public class BluetoothScannerActivity extends AppCompatActivity {
             SBluetoothDevice device = getItem(position);
 
             // Lookup view for data population
-            TextView deviceName = (TextView) convertView.findViewById(R.id.device_name);
+            TextView deviceName = convertView.findViewById(R.id.device_name);
             deviceName.setText(device.getName());
 
-            TextView deviceAddress = (TextView) convertView.findViewById(R.id.device_address);
+            TextView deviceAddress = convertView.findViewById(R.id.device_address);
             deviceAddress.setText(device.getAddress());
 
             return convertView;

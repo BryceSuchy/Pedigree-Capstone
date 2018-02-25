@@ -4,7 +4,6 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.TypedValue;
@@ -73,7 +72,7 @@ public class TabChartFragment extends Fragment {
         allGraphDataSingleton = AllGraphDataSingleton.getInstance();
         dataEntries = new ArrayList<>();
         lineChartArrayList = new ArrayList<>();
-        graphLinearLayout = (LinearLayout)scrollView.findViewById(R.id.graphListLayout);
+        graphLinearLayout = scrollView.findViewById(R.id.graphListLayout);
         graphIndexMap = new HashMap<>();
 
         timerHandler = new Handler();

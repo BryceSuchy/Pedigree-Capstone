@@ -27,8 +27,8 @@ public class TabGaugeFragment extends Fragment {
         final ScrollView scrollView = (ScrollView)inflater.inflate(R.layout.tab_gauge_layout, container, false);
 
         //Create two layouts both taking up half the screen to have 2 views next to each other
-        LinearLayout gaugeLayoutLeft = (LinearLayout)scrollView.findViewById(R.id.gaugeLayout1);
-        LinearLayout gaugeLayoutRight = (LinearLayout)scrollView.findViewById(R.id.gaugeLayout2);
+        LinearLayout gaugeLayoutLeft = scrollView.findViewById(R.id.gaugeLayout1);
+        LinearLayout gaugeLayoutRight = scrollView.findViewById(R.id.gaugeLayout2);
 
         Bundle extras = getArguments();
         if (extras != null) {

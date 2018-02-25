@@ -1,6 +1,5 @@
 package com.pedigreetechnologies.diagnosticview;
 
-import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -88,12 +87,7 @@ public class DiagnosticParameter implements Comparable<DiagnosticParameter>, Par
         int bitLength = Integer.parseInt(csvSplitString[5]);
         boolean endianness;
 
-        if(csvSplitString[6].equals("1")){
-            endianness = true;
-        }
-        else{
-            endianness = false;
-        }
+        endianness = csvSplitString[6].equals("1");
         long errorValue = Long.parseLong(csvSplitString[7]);
         double resolution = Double.parseDouble(csvSplitString[8]);
         double offset = Double.parseDouble(csvSplitString[9]);
