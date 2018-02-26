@@ -35,8 +35,10 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         Intent intent = getIntent();
+
+        // get rid of app name being displayed in views
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         if (intent != null) {
             Bundle extras = intent.getExtras();
