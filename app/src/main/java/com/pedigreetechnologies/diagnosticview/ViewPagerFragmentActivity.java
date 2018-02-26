@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import java.util.List;
 import java.util.Vector;
@@ -18,6 +20,8 @@ import java.util.Vector;
 
 public class ViewPagerFragmentActivity extends AppCompatActivity {
     private PagerAdapter mPagerAdapter;
+
+    ViewPager pager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,8 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
                 this.initialisePaging(extras);
             }
         }
+
+
     }
 
     /**
@@ -56,7 +62,7 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
         }
 
         this.mPagerAdapter  = new PagerAdapter(super.getSupportFragmentManager(), fragments);
-        ViewPager pager = (ViewPager)super.findViewById(R.id.viewpager);
+        pager = (ViewPager)super.findViewById(R.id.viewpager);
         pager.setAdapter(this.mPagerAdapter);
     }
 
@@ -72,8 +78,28 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        // Switch button that changes between gauge and graph view
+        final Switch switchAB = menu.findItem(R.id.myswitch).getActionView().findViewById(R.id.switchAB);
+        switchAB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // Switches to graph view
+                    pager.setCurrentItem(1,true);
+
+                }
+                else
+                {
+                    // Switches to gauge view
+                    pager.setCurrentItem(0,true);
+                }
+            }
+        });
         return true;
     }
 
