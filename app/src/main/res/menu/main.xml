@@ -7,9 +7,8 @@
         android:title="@string/action_settings"
         app:showAsAction="never" /> -->
     <item
-        android:id="@+id/myswitch"
+        android:id="@+id/mytoggle"
         android:title=""
-        app:showAsAction="always"
-        app:actionLayout="@layout/actionbar_switch"
-        />
+        app:actionLayout="@layout/toggle_ab"
+        app:showAsAction="always" />
 </menu>
