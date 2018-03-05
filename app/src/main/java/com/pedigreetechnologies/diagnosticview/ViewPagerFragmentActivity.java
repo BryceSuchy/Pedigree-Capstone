@@ -24,6 +24,8 @@ import android.widget.ToggleButton;
 import java.util.List;
 import java.util.Vector;
 
+import de.nitri.gauge.Gauge;
+
 
 public class ViewPagerFragmentActivity extends AppCompatActivity {
 
@@ -90,6 +92,7 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
         this.mPagerAdapter  = new PagerAdapter(super.getSupportFragmentManager(), fragments);
         pager = (ViewPager)super.findViewById(R.id.viewpager);
         pager.setAdapter(this.mPagerAdapter);
+
 
     }
 
