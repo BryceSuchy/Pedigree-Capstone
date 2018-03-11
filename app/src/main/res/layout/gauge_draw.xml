@@ -6,6 +6,82 @@
     android:layout_height="match_parent">
 
     <de.nitri.gauge.Gauge
+        android:id="@+id/SpeedEngine"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.75"
+        android:visibility="gone"
+        gauge:labelTextSize="35"
+        gauge:textSize="40"
+        gauge:maxValue="180"
+        gauge:minValue="0"
+        gauge:totalNicks="120"
+        gauge:valuePerNick="1.8"
+        gauge:upperText=""
+        gauge:lowerText="Speed (Engine)"
+        gauge:scaleColor="@color/gaugeScale"
+        gauge:needleShadow="false"/>
+
+    <de.nitri.gauge.Gauge
+        android:id="@+id/SpeedCruiseControl"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.75"
+        android:visibility="gone"
+        gauge:labelTextSize="35"
+        gauge:textSize="40"
+        gauge:maxValue="180"
+        gauge:minValue="0"
+        gauge:totalNicks="120"
+        gauge:valuePerNick="1.8"
+        gauge:upperText=""
+        gauge:lowerText="Speed (Cruise Control)"
+        gauge:scaleColor="@color/gaugeScale"
+        gauge:needleShadow="false"/>
+
+    <de.nitri.gauge.Gauge
+        android:id="@+id/SpeedInstrumentCluster"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.75"
+        android:visibility="gone"
+        gauge:labelTextSize="35"
+        gauge:textSize="40"
+        gauge:maxValue="180"
+        gauge:minValue="0"
+        gauge:totalNicks="120"
+        gauge:valuePerNick="1.8"
+        gauge:upperText=""
+        gauge:lowerText="Speed (Instrument Cluster)"
+        gauge:scaleColor="@color/gaugeScale"
+        gauge:needleShadow="false"/>
+
+    <de.nitri.gauge.Gauge
+        android:id="@+id/SpeedBrakesSystemControllerAxleBased"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.75"
+        android:visibility="gone"
+        gauge:labelTextSize="35"
+        gauge:textSize="40"
+        gauge:maxValue="180"
+        gauge:minValue="0"
+        gauge:totalNicks="120"
+        gauge:valuePerNick="1.8"
+        gauge:upperText=""
+        gauge:lowerText="Speed BSC-AB"
+        gauge:scaleColor="@color/gaugeScale"
+        gauge:needleShadow="false"/>
+
+    <de.nitri.gauge.Gauge
         android:id="@+id/EngineRPM"
         android:layout_width="500dp"
         android:layout_height="500dp"
@@ -42,5 +118,5 @@
         gauge:lowerText="Diesel Level"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"/>
-
+    
 </RelativeLayout>

@@ -32,7 +32,7 @@ public class TabGaugeFragment extends Fragment {
 
         //Create two layouts both taking up half the screen to have 2 views next to each other
         LinearLayout gaugeLayoutLeft = scrollView.findViewById(R.id.gaugeLayout1);
-        //LinearLayout gaugeLayoutRight = scrollView.findViewById(R.id.gaugeLayout2);
+        LinearLayout gaugeLayoutRight = scrollView.findViewById(R.id.gaugeLayout2);
 
         Bundle extras = getArguments();
         if (extras != null) {
@@ -61,11 +61,11 @@ public class TabGaugeFragment extends Fragment {
             //If there is a min and a max create a gauge view
             else {
 
-                String gaugeID = tempParm.getLabel().replaceAll("\\s+","");
+                String gaugeID = tempParm.getLabel().replaceAll("\\s+","").replaceAll("\\W", "");
                 int resID = getResources().getIdentifier(gaugeID, "id", getActivity().getPackageName());
                 Gauge gauge = relativeLayout.findViewById(resID);
                 gauge.setVisibility(Gauge.VISIBLE);
-                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((int) (width / 1.7), (int) (width / 1.7));
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((int) (width / 1.8), (int) (width / 1.8));
                 gauge.setLayoutParams(layoutParams);
                 gauge.setValue(0);
                 gauge.invalidate();
@@ -80,13 +80,13 @@ public class TabGaugeFragment extends Fragment {
                 if(view.getParent()!=null)
                     ((ViewGroup)view.getParent()).removeView(view); // <- fix
                 gaugeLayoutLeft.addView(view);
-           // }
+            }
             /*else{
                 if(view.getParent()!=null)
                     ((ViewGroup)view.getParent()).removeView(view); // <- fix
                 gaugeLayoutRight.addView(view);
             }*/
-        }
+        //}
 
         //Handler to update the gauges with the most recent values
         gaugeHandler = new Handler() {
