@@ -44,18 +44,14 @@ public class TabGaugeFragment extends Fragment {
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
 
+        // Adds Gauges above all TextViews
         for(int i = 0; i < selectedParameterList.size(); i ++){
             DiagnosticParameter tempParm = selectedParameterList.get(i);
 
 
             //If there is not a min and a max create a text view
             if(Double.isNaN(tempParm.getMin())|| Double.isNaN(tempParm.getMax())){
-                TextView textView = new TextView(this.getContext());
-                textView.setLayoutParams(new ViewGroup.LayoutParams((int) (width / 2), (int)((width / 2))));
-                textView.setText("0.0 " + tempParm.getUnits() + "\n" + tempParm.getLabel());
-                textView.setMinLines(2);
-                textView.setGravity(Gravity.CENTER);
-                view = textView;
+
             }
 
             //If there is a min and a max create a gauge view
@@ -70,22 +66,53 @@ public class TabGaugeFragment extends Fragment {
                 gauge.setValue(0);
                 gauge.invalidate();
                 view = gauge;
+
+                //Set a tag so you know which view is attached to what label
+                view.setTag(tempParm.getLabel());
+
+                //Add the views to the parents left to right
+                if(i % 2 == 0){
+                    if(view.getParent()!=null)
+                        ((ViewGroup)view.getParent()).removeView(view); // <- fix
+                    gaugeLayoutLeft.addView(view);
+                }
+                else{
+                    if(view.getParent()!=null)
+                        ((ViewGroup)view.getParent()).removeView(view); // <- fix
+                    gaugeLayoutRight.addView(view);
+                }
             }
 
-            //Set a tag so you know which view is attached to what label
-            view.setTag(tempParm.getLabel());
+        }
 
-            //Add the views to the parents left to right
-            if(i % 2 == 0){
+
+
+
+        // Adds TextViews below all gauges
+        for(int i = 0; i < selectedParameterList.size(); i ++){
+            DiagnosticParameter tempParm = selectedParameterList.get(i);
+
+
+            //If there is not a min and a max create a text view
+            if(Double.isNaN(tempParm.getMin())|| Double.isNaN(tempParm.getMax())){
+                TextView textView = new TextView(this.getContext());
+                textView.setLayoutParams(new ViewGroup.LayoutParams((int) (width / 2), (int)((width / 6))));
+                textView.setText("0.0 " + tempParm.getUnits() + "\n" + tempParm.getLabel());
+                textView.setMinLines(2);
+                textView.setGravity(Gravity.LEFT);
+                textView.setPadding(50,0,0,0);
+                view = textView;
+
+                //Set a tag so you know which view is attached to what label
+                view.setTag(tempParm.getLabel());
+
+                //Add the views to the parents left
                 if(view.getParent()!=null)
                     ((ViewGroup)view.getParent()).removeView(view); // <- fix
                 gaugeLayoutLeft.addView(view);
+
             }
-            else{
-                if(view.getParent()!=null)
-                    ((ViewGroup)view.getParent()).removeView(view); // <- fix
-                gaugeLayoutRight.addView(view);
-            }
+
         }
 
 
@@ -111,7 +138,6 @@ public class TabGaugeFragment extends Fragment {
                     }
                 }
                 else if(view instanceof Gauge){
-                    //((GaugeView)view).updateAndRefreshValue(Float.parseFloat(value));
                     ((Gauge)view).setLowerText(value);
                     ((Gauge)view).moveToValue(Float.parseFloat(value));
                 }
