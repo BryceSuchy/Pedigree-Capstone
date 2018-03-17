@@ -61,11 +61,11 @@ public class TabGaugeFragment extends Fragment {
             //If there is a min and a max create a gauge view
             else {
 
-                String gaugeID = tempParm.getLabel().replaceAll("\\s+","").replaceAll("\\W", "");
+                String gaugeID = tempParm.getLabel().replaceAll("%\\s+","").replaceAll("\\W", "");
                 int resID = getResources().getIdentifier(gaugeID, "id", getActivity().getPackageName());
                 Gauge gauge = relativeLayout.findViewById(resID);
                 gauge.setVisibility(Gauge.VISIBLE);
-                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((int) (width / 1.8), (int) (width / 1.8));
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((int) (width / 2), (int) (width / 2));
                 gauge.setLayoutParams(layoutParams);
                 gauge.setValue(0);
                 gauge.invalidate();
@@ -76,17 +76,18 @@ public class TabGaugeFragment extends Fragment {
             view.setTag(tempParm.getLabel());
 
             //Add the views to the parents left to right
-            //if(i % 2 == 0){
+            if(i % 2 == 0){
                 if(view.getParent()!=null)
                     ((ViewGroup)view.getParent()).removeView(view); // <- fix
                 gaugeLayoutLeft.addView(view);
             }
-            /*else{
+            else{
                 if(view.getParent()!=null)
                     ((ViewGroup)view.getParent()).removeView(view); // <- fix
                 gaugeLayoutRight.addView(view);
-            }*/
-        //}
+            }
+        }
+
 
         //Handler to update the gauges with the most recent values
         gaugeHandler = new Handler() {

@@ -17,10 +17,6 @@
             android:id="@+id/gaugeLayout1">
         </LinearLayout>
 
-        <include layout="@layout/gauge_draw"
-            android:id="@+id/gaugeholder"/>
-
-
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -29,6 +25,8 @@
             android:id="@+id/gaugeLayout2">
         </LinearLayout>
 
+        <include layout="@layout/gauge_draw"
+            android:id="@+id/gaugeholder"/>
 
     </LinearLayout>
 

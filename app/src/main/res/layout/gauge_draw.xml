@@ -19,10 +19,10 @@
         gauge:minValue="0"
         gauge:totalNicks="120"
         gauge:valuePerNick="1.8"
-        gauge:upperText=""
+        gauge:upperText="Speed (Engine)"
         gauge:lowerText="Speed (Engine)"
         gauge:scaleColor="@color/gaugeScale"
-        gauge:needleShadow="false"/>
+        gauge:needleShadow="false" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/SpeedCruiseControl"
@@ -38,8 +38,8 @@
         gauge:minValue="0"
         gauge:totalNicks="120"
         gauge:valuePerNick="1.8"
-        gauge:upperText=""
-        gauge:lowerText="Speed (Cruise Control)"
+        gauge:upperText="Speed (CC)"
+        gauge:lowerText="Speed (CC)"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"/>
 
@@ -57,7 +57,7 @@
         gauge:minValue="0"
         gauge:totalNicks="120"
         gauge:valuePerNick="1.8"
-        gauge:upperText=""
+        gauge:upperText="Speed (IC)"
         gauge:lowerText="Speed (Instrument Cluster)"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"/>
@@ -76,7 +76,7 @@
         gauge:minValue="0"
         gauge:totalNicks="120"
         gauge:valuePerNick="1.8"
-        gauge:upperText=""
+        gauge:upperText="Speed BSC-AB"
         gauge:lowerText="Speed BSC-AB"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"/>
@@ -95,8 +95,122 @@
         gauge:minValue="0"
         gauge:totalNicks="120"
         gauge:valuePerNick="80"
-        gauge:upperText=""
+        gauge:upperText="RPM"
         gauge:lowerText="RPM"
+        gauge:scaleColor="@color/gaugeScale"
+        gauge:needleShadow="false"/>
+
+    <de.nitri.gauge.Gauge
+        android:id="@+id/CoolantTemperature"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.75"
+        android:visibility="gone"
+        gauge:labelTextSize="35"
+        gauge:textSize="40"
+        gauge:maxValue="320"
+        gauge:minValue="-40"
+        gauge:totalNicks="120"
+        gauge:valuePerNick="3.6"
+        gauge:upperText="Cool. Temp."
+        gauge:lowerText="Cool. Temp."
+        gauge:scaleColor="@color/gaugeScale"
+        gauge:needleShadow="false"/>
+
+    <de.nitri.gauge.Gauge
+        android:id="@+id/OilTemperature"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.75"
+        android:visibility="gone"
+        gauge:labelTextSize="35"
+        gauge:textSize="40"
+        gauge:maxValue="300"
+        gauge:minValue="-100"
+        gauge:totalNicks="120"
+        gauge:valuePerNick="3.33"
+        gauge:upperText="Oil Temp."
+        gauge:lowerText="Oil Temp."
+        gauge:scaleColor="@color/gaugeScale"
+        gauge:needleShadow="false"/>
+
+    <de.nitri.gauge.Gauge
+        android:id="@+id/OilPressure"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.75"
+        android:visibility="gone"
+        gauge:labelTextSize="35"
+        gauge:textSize="40"
+        gauge:maxValue="180"
+        gauge:minValue="0"
+        gauge:totalNicks="120"
+        gauge:valuePerNick="1.8"
+        gauge:upperText="Oil Pres."
+        gauge:lowerText="Oil Pres."
+        gauge:scaleColor="@color/gaugeScale"
+        gauge:needleShadow="false"/>
+
+    <de.nitri.gauge.Gauge
+        android:id="@+id/CoolantLevel"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.75"
+        android:visibility="gone"
+        gauge:labelTextSize="35"
+        gauge:textSize="40"
+        gauge:maxValue="100"
+        gauge:minValue="0"
+        gauge:totalNicks="120"
+        gauge:valuePerNick="1"
+        gauge:upperText="Cool. Level"
+        gauge:lowerText="Cool. Level"
+        gauge:scaleColor="@color/gaugeScale"
+        gauge:needleShadow="false"/>
+
+    <de.nitri.gauge.Gauge
+        android:id="@+id/FuelLevel"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.75"
+        android:visibility="gone"
+        gauge:labelTextSize="35"
+        gauge:textSize="40"
+        gauge:maxValue="100"
+        gauge:minValue="0"
+        gauge:totalNicks="120"
+        gauge:valuePerNick="1"
+        gauge:upperText="Fuel Level%"
+        gauge:lowerText="Fuel Level%"
+        gauge:scaleColor="@color/gaugeScale"
+        gauge:needleShadow="false"/>
+
+    <de.nitri.gauge.Gauge
+        android:id="@+id/FuelLevelBodyController"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.75"
+        android:visibility="gone"
+        gauge:labelTextSize="35"
+        gauge:textSize="40"
+        gauge:maxValue="100"
+        gauge:minValue="0"
+        gauge:totalNicks="120"
+        gauge:valuePerNick="1"
+        gauge:upperText="Fuel Level% BC"
+        gauge:lowerText="Fuel Level% BC"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"/>
 
@@ -114,9 +228,9 @@
         gauge:minValue="0"
         gauge:totalNicks="120"
         gauge:valuePerNick="1"
-        gauge:upperText=""
+        gauge:upperText="Diesel Level"
         gauge:lowerText="Diesel Level"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"/>
-    
+
 </RelativeLayout>
