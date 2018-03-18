@@ -19,7 +19,6 @@
         gauge:minValue="0"
         gauge:totalNicks="120"
         gauge:valuePerNick="1.8"
-        gauge:upperText="Speed (Engine)"
         gauge:lowerText="Speed (Engine)"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false" />
@@ -38,7 +37,6 @@
         gauge:minValue="0"
         gauge:totalNicks="120"
         gauge:valuePerNick="1.8"
-        gauge:upperText="Speed (CC)"
         gauge:lowerText="Speed (CC)"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"/>
@@ -57,7 +55,6 @@
         gauge:minValue="0"
         gauge:totalNicks="120"
         gauge:valuePerNick="1.8"
-        gauge:upperText="Speed (IC)"
         gauge:lowerText="Speed (Instrument Cluster)"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"/>
@@ -76,7 +73,6 @@
         gauge:minValue="0"
         gauge:totalNicks="120"
         gauge:valuePerNick="1.8"
-        gauge:upperText="Speed BSC-AB"
         gauge:lowerText="Speed BSC-AB"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"/>
@@ -95,7 +91,6 @@
         gauge:minValue="0"
         gauge:totalNicks="120"
         gauge:valuePerNick="80"
-        gauge:upperText="RPM"
         gauge:lowerText="RPM"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"/>
@@ -114,7 +109,6 @@
         gauge:minValue="-40"
         gauge:totalNicks="120"
         gauge:valuePerNick="3.6"
-        gauge:upperText="Cool. Temp."
         gauge:lowerText="Cool. Temp."
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"/>
@@ -133,7 +127,6 @@
         gauge:minValue="-100"
         gauge:totalNicks="120"
         gauge:valuePerNick="3.33"
-        gauge:upperText="Oil Temp."
         gauge:lowerText="Oil Temp."
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"/>
@@ -152,7 +145,6 @@
         gauge:minValue="0"
         gauge:totalNicks="120"
         gauge:valuePerNick="1.8"
-        gauge:upperText="Oil Pres."
         gauge:lowerText="Oil Pres."
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"/>
@@ -171,7 +163,6 @@
         gauge:minValue="0"
         gauge:totalNicks="120"
         gauge:valuePerNick="1"
-        gauge:upperText="Cool. Level"
         gauge:lowerText="Cool. Level"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"/>
@@ -190,7 +181,6 @@
         gauge:minValue="0"
         gauge:totalNicks="120"
         gauge:valuePerNick="1"
-        gauge:upperText="Fuel Level%"
         gauge:lowerText="Fuel Level%"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"/>
@@ -209,7 +199,6 @@
         gauge:minValue="0"
         gauge:totalNicks="120"
         gauge:valuePerNick="1"
-        gauge:upperText="Fuel Level% BC"
         gauge:lowerText="Fuel Level% BC"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"/>
@@ -228,7 +217,6 @@
         gauge:minValue="0"
         gauge:totalNicks="120"
         gauge:valuePerNick="1"
-        gauge:upperText="Diesel Level"
         gauge:lowerText="Diesel Level"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"/>
@@ -237,12 +225,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/darker_gray"
+        android:visibility="gone"
         android:id="@+id/line1"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#3F51B5"
+        android:visibility="gone"
         android:id="@+id/divider"/>
 
 </RelativeLayout>

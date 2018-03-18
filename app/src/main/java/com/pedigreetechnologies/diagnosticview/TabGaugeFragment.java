@@ -87,12 +87,24 @@ public class TabGaugeFragment extends Fragment {
                     gaugeLayoutLeft.addView(view);
 
                     // Adds horizontal line under gauge
-                    RelativeLayout relLineH = (RelativeLayout)inflater.inflate(R.layout.gauge_draw, container, false);
+                    /*RelativeLayout relLineH = (RelativeLayout)inflater.inflate(R.layout.gauge_draw, container, false);
                     lineView = relLineH.findViewById(R.id.line1);
                     RelativeLayout.LayoutParams layoutParamsLineH = new RelativeLayout.LayoutParams((int) (width / 2), (int) (width / 400));
                     lineView.setLayoutParams(layoutParamsLineH);
                     lineView.invalidate();
                     view = lineView;
+                    */
+
+                    // Add gauge name under gauge
+                    TextView textView = new TextView(this.getContext());
+                    textView.setLayoutParams(new ViewGroup.LayoutParams((int) (width / 2), ViewGroup.LayoutParams.WRAP_CONTENT));
+                    textView.setText(tempParm.getLabel());
+                    textView.setTextColor(Color.BLACK);
+                    textView.setMinLines(2);
+                    textView.setGravity(Gravity.CENTER);
+                    textView.setPadding(5,0,0,100);
+                    view = textView;
+
                     if(view.getParent()!=null)
                         ((ViewGroup)view.getParent()).removeView(view);
                     gaugeLayoutLeft.addView(view);
@@ -117,15 +129,30 @@ public class TabGaugeFragment extends Fragment {
                     gaugeLayoutRight.addView(view);
 
                     // Adds horizontal line under gauge
-                    RelativeLayout relLine = (RelativeLayout)inflater.inflate(R.layout.gauge_draw, container, false);
+                    /*RelativeLayout relLine = (RelativeLayout)inflater.inflate(R.layout.gauge_draw, container, false);
                     lineView = relLine.findViewById(R.id.line1);
                     RelativeLayout.LayoutParams layoutParamsLine = new RelativeLayout.LayoutParams((int) (width / 2), (int) (width / 400));
                     lineView.setLayoutParams(layoutParamsLine);
                     lineView.invalidate();
                     view = lineView;
+                    */
+
+                    // Add gauge name under gauge
+                    TextView textView = new TextView(this.getContext());
+                    textView.setLayoutParams(new ViewGroup.LayoutParams((int) (width / 2), ViewGroup.LayoutParams.WRAP_CONTENT));
+                    textView.setText(tempParm.getLabel());
+                    textView.setTextColor(Color.BLACK);
+                    textView.setMinLines(2);
+                    textView.setGravity(Gravity.CENTER);
+                    textView.setPadding(5,0,0,100);
+                    view = textView;
+
+
                     if(view.getParent()!=null)
                         ((ViewGroup)view.getParent()).removeView(view);
                     gaugeLayoutRight.addView(view);
+
+
                 }
             }
 
@@ -160,6 +187,7 @@ public class TabGaugeFragment extends Fragment {
                 // Adds horizontal line under text metrics
                 RelativeLayout relLine = (RelativeLayout)inflater.inflate(R.layout.gauge_draw, container, false);
                 lineView = relLine.findViewById(R.id.line1);
+                lineView.setVisibility(View.VISIBLE);
                 RelativeLayout.LayoutParams layoutParamsLine = new RelativeLayout.LayoutParams((int) (width), (int) (width / 400));
                 lineView.setLayoutParams(layoutParamsLine);
                 lineView.invalidate();
@@ -200,6 +228,11 @@ public class TabGaugeFragment extends Fragment {
 
                 if(view instanceof TextView){
                     DiagnosticParameter tempParm;
+
+                    // Allows blue divider to become visible when text views exist
+                    if (lineView.getVisibility() == View.GONE) {
+                        lineView.setVisibility(View.VISIBLE);
+                    }
                     for(int i = 0; i < selectedParameterList.size(); i++){
                         tempParm = selectedParameterList.get(i);
                         if(tempParm.getLabel().equals(label)) {
