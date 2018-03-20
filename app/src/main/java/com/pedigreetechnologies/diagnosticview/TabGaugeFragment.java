@@ -22,6 +22,7 @@ public class TabGaugeFragment extends Fragment {
     private Handler gaugeHandler;
     View view = null;
     View lineView;
+    int layoutValue = -1;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,9 +36,6 @@ public class TabGaugeFragment extends Fragment {
         //Create two layouts both taking up half the screen to have 2 views next to each other
         LinearLayout gaugeLayoutLeft = scrollView.findViewById(R.id.gaugeLayout1);
         LinearLayout gaugeLayoutRight = scrollView.findViewById(R.id.gaugeLayout2);
-
-        // Layout to allow a vertical line in between gaugeLayout1 and gaugeLayout2
-        LinearLayout verticalLineLayout = scrollView.findViewById(R.id.verticleLineLayout);
 
         // Layout to add text metrics below all gauges
         LinearLayout textMetricLayout = scrollView.findViewById(R.id.textMetricLayout);
@@ -56,117 +54,9 @@ public class TabGaugeFragment extends Fragment {
         for(int i = 0; i < selectedParameterList.size(); i ++){
             DiagnosticParameter tempParm = selectedParameterList.get(i);
 
-
             //If there is not a min and a max create a text view
             if(Double.isNaN(tempParm.getMin())|| Double.isNaN(tempParm.getMax())){
 
-            }
-
-            //If there is a min and a max create a gauge view
-            else {
-
-                String gaugeID = tempParm.getLabel().replaceAll("%\\s+","").replaceAll("\\W", "");
-                int resID = getResources().getIdentifier(gaugeID, "id", getActivity().getPackageName());
-                Gauge gauge = relativeLayout.findViewById(resID);
-                gauge.setVisibility(Gauge.VISIBLE);
-                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((int) (width / 2), (int) (width / 2));
-                gauge.setLayoutParams(layoutParams);
-                gauge.setValue(0);
-                gauge.invalidate();
-                view = gauge;
-
-                //Set a tag so you know which view is attached to what label
-                view.setTag(tempParm.getLabel());
-
-                //Add the views to the parents left to right
-                if(i % 2 == 0){
-
-                    // Adds gauge
-                    if(view.getParent()!=null)
-                        ((ViewGroup)view.getParent()).removeView(view);
-                    gaugeLayoutLeft.addView(view);
-
-                    // Adds horizontal line under gauge
-                    /*RelativeLayout relLineH = (RelativeLayout)inflater.inflate(R.layout.gauge_draw, container, false);
-                    lineView = relLineH.findViewById(R.id.line1);
-                    RelativeLayout.LayoutParams layoutParamsLineH = new RelativeLayout.LayoutParams((int) (width / 2), (int) (width / 400));
-                    lineView.setLayoutParams(layoutParamsLineH);
-                    lineView.invalidate();
-                    view = lineView;
-                    */
-
-                    // Add gauge name under gauge
-                    TextView textView = new TextView(this.getContext());
-                    textView.setLayoutParams(new ViewGroup.LayoutParams((int) (width / 2), ViewGroup.LayoutParams.WRAP_CONTENT));
-                    textView.setText(tempParm.getLabel());
-                    textView.setTextColor(Color.BLACK);
-                    textView.setMinLines(2);
-                    textView.setGravity(Gravity.CENTER);
-                    textView.setPadding(5,0,0,100);
-                    view = textView;
-
-                    if(view.getParent()!=null)
-                        ((ViewGroup)view.getParent()).removeView(view);
-                    gaugeLayoutLeft.addView(view);
-
-                    // Adds Vertical Line to the right of gauge
-                    /*RelativeLayout relLineV = (RelativeLayout)inflater.inflate(R.layout.gauge_draw, container, false);
-                    lineView = relLineV.findViewById(R.id.line1);
-                    RelativeLayout.LayoutParams layoutParamsLineV = new RelativeLayout.LayoutParams((int) (width / 400), (int) (width / 2));
-                    lineView.setLayoutParams(layoutParamsLineV);
-                    lineView.invalidate();
-                    view = lineView;
-                    if(view.getParent()!=null)
-                        ((ViewGroup)view.getParent()).removeView(view);
-                    verticalLineLayout.addView(view);*/
-
-                }
-                else{
-
-                    // Adds gauge
-                    if(view.getParent()!=null)
-                        ((ViewGroup)view.getParent()).removeView(view);
-                    gaugeLayoutRight.addView(view);
-
-                    // Adds horizontal line under gauge
-                    /*RelativeLayout relLine = (RelativeLayout)inflater.inflate(R.layout.gauge_draw, container, false);
-                    lineView = relLine.findViewById(R.id.line1);
-                    RelativeLayout.LayoutParams layoutParamsLine = new RelativeLayout.LayoutParams((int) (width / 2), (int) (width / 400));
-                    lineView.setLayoutParams(layoutParamsLine);
-                    lineView.invalidate();
-                    view = lineView;
-                    */
-
-                    // Add gauge name under gauge
-                    TextView textView = new TextView(this.getContext());
-                    textView.setLayoutParams(new ViewGroup.LayoutParams((int) (width / 2), ViewGroup.LayoutParams.WRAP_CONTENT));
-                    textView.setText(tempParm.getLabel());
-                    textView.setTextColor(Color.BLACK);
-                    textView.setMinLines(2);
-                    textView.setGravity(Gravity.CENTER);
-                    textView.setPadding(5,0,0,100);
-                    view = textView;
-
-
-                    if(view.getParent()!=null)
-                        ((ViewGroup)view.getParent()).removeView(view);
-                    gaugeLayoutRight.addView(view);
-
-
-                }
-            }
-
-        }
-
-
-
-        // Adds TextViews below all gauges
-        for(int i = 0; i < selectedParameterList.size(); i ++){
-            DiagnosticParameter tempParm = selectedParameterList.get(i);
-
-
-            //If there is not a min and a max create a text view
-            if(Double.isNaN(tempParm.getMin())|| Double.isNaN(tempParm.getMax())){
                 TextView textView = new TextView(this.getContext());
                 textView.setLayoutParams(new ViewGroup.LayoutParams((int) (width), (int)((width / 9))));
                 textView.setText("0.0 " + tempParm.getUnits() + "\n" + tempParm.getLabel());
@@ -196,23 +86,85 @@ public class TabGaugeFragment extends Fragment {
                 if(view.getParent()!=null)
                     ((ViewGroup)view.getParent()).removeView(view);
                 textMetricLayout.addView(view);
+            }
 
+            //If there is a min and a max create a gauge view
+            else {
+
+                layoutValue ++;
+                String gaugeID = tempParm.getLabel().replaceAll("%\\s+","").replaceAll("\\W", "");
+                int resID = getResources().getIdentifier(gaugeID, "id", getActivity().getPackageName());
+                Gauge gauge = relativeLayout.findViewById(resID);
+                gauge.setVisibility(Gauge.VISIBLE);
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((int) (width / 2), (int) (width / 2));
+                gauge.setLayoutParams(layoutParams);
+                gauge.setValue(0);
+                gauge.invalidate();
+                view = gauge;
+
+                //Set a tag so you know which view is attached to what label
+                view.setTag(tempParm.getLabel());
+
+                //Add the views to the parents left to right
+                if(layoutValue % 2 == 0){
+
+                    // Adds gauge
+                    if(view.getParent()!=null)
+                        ((ViewGroup)view.getParent()).removeView(view);
+                    gaugeLayoutLeft.addView(view);
+
+                    // Add gauge name under gauge
+                    TextView textView = new TextView(this.getContext());
+                    textView.setLayoutParams(new ViewGroup.LayoutParams((int) (width / 2), ViewGroup.LayoutParams.WRAP_CONTENT));
+                    textView.setText(tempParm.getLabel());
+                    textView.setTextColor(Color.BLACK);
+                    textView.setMinLines(2);
+                    textView.setGravity(Gravity.CENTER);
+                    textView.setPadding(5,0,0,100);
+                    view = textView;
+
+                    if(view.getParent()!=null)
+                        ((ViewGroup)view.getParent()).removeView(view);
+                    gaugeLayoutLeft.addView(view);
+
+                }
+                else{
+
+                    // Adds gauge
+                    if(view.getParent()!=null)
+                        ((ViewGroup)view.getParent()).removeView(view);
+                    gaugeLayoutRight.addView(view);
+
+                    // Add gauge name under gauge
+                    TextView textView = new TextView(this.getContext());
+                    textView.setLayoutParams(new ViewGroup.LayoutParams((int) (width / 2), ViewGroup.LayoutParams.WRAP_CONTENT));
+                    textView.setText(tempParm.getLabel());
+                    textView.setTextColor(Color.BLACK);
+                    textView.setMinLines(2);
+                    textView.setGravity(Gravity.CENTER);
+                    textView.setPadding(5,0,0,100);
+                    view = textView;
+
+                    if(view.getParent()!=null)
+                        ((ViewGroup)view.getParent()).removeView(view);
+                    gaugeLayoutRight.addView(view);
+                }
             }
 
         }
 
         // Adds Blue Divider
-        RelativeLayout relLine = (RelativeLayout)inflater.inflate(R.layout.gauge_draw, container, false);
-        lineView = relLine.findViewById(R.id.divider);
-        RelativeLayout.LayoutParams layoutParamsLine = new RelativeLayout.LayoutParams((int) (width), (int) (width / 100));
-        lineView.setLayoutParams(layoutParamsLine);
+        RelativeLayout blueDividerLayout = (RelativeLayout)inflater.inflate(R.layout.gauge_draw, container, false);
+        lineView = blueDividerLayout.findViewById(R.id.divider);
+        RelativeLayout.LayoutParams layoutParamsLineBlue = new RelativeLayout.LayoutParams((int) (width), (int) (width / 100));
+        lineView.setLayoutParams(layoutParamsLineBlue);
+        lineView.setVisibility(View.VISIBLE);
         lineView.invalidate();
         view = lineView;
 
         if(view.getParent()!=null)
             ((ViewGroup)view.getParent()).removeView(view);
         textMetricLayout.addView(view);
-
 
         //Handler to update the gauges with the most recent values
         gaugeHandler = new Handler() {
@@ -228,11 +180,6 @@ public class TabGaugeFragment extends Fragment {
 
                 if(view instanceof TextView){
                     DiagnosticParameter tempParm;
-
-                    // Allows blue divider to become visible when text views exist
-                    if (lineView.getVisibility() == View.GONE) {
-                        lineView.setVisibility(View.VISIBLE);
-                    }
                     for(int i = 0; i < selectedParameterList.size(); i++){
                         tempParm = selectedParameterList.get(i);
                         if(tempParm.getLabel().equals(label)) {
@@ -251,7 +198,4 @@ public class TabGaugeFragment extends Fragment {
 
         return scrollView;
     }
-
-
-
 }
