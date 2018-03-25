@@ -2,11 +2,14 @@ package com.pedigreetechnologies.diagnosticview;
 
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +17,15 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.LargeValueFormatter;
+import com.github.mikephil.charting.formatter.*;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.util.ArrayList;
@@ -49,10 +55,13 @@ public class TabChartFragment extends Fragment {
     long graphMax = 1 * 30 * 1000;
 
     // Number of updates per second ex: 1000/4 = approx 4 times a second
-    private int updateTime = 1000 / 1;
+    private int updateTime = 1000 / 2;
 
     //Issue with graph crashing when there is no data in the set, this is removed after the graph has more data
     Entry emptyEntryPlaceholder = (new Entry(0, 0));
+
+    //new padding var
+    public int paddingLength = 7;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -72,7 +81,7 @@ public class TabChartFragment extends Fragment {
         allGraphDataSingleton = AllGraphDataSingleton.getInstance();
         dataEntries = new ArrayList<>();
         lineChartArrayList = new ArrayList<>();
-        graphLinearLayout = scrollView.findViewById(R.id.graphListLayout);
+        graphLinearLayout = (LinearLayout)scrollView.findViewById(R.id.graphListLayout);
         graphIndexMap = new HashMap<>();
 
         timerHandler = new Handler();
@@ -180,6 +189,8 @@ public class TabChartFragment extends Fragment {
             YAxis leftYAxis = chart.getAxisLeft();
 
             float maxY = allGraphDataSingleton.getMaxYValue(dataLabel, currentTime, graphMax);
+            //new
+            maxY = formulateMaxY(maxY);
 
             if(!Float.isNaN(maxY) && selectedParameterList.get(i).getMin() != Double.NaN){
                 leftYAxis.setAxisMaximum(maxY);
@@ -206,7 +217,7 @@ public class TabChartFragment extends Fragment {
 
             //Setting view width and height, will be need to be used for dynamic graph size
             Resources r = getResources();
-            float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 175, r.getDisplayMetrics());
+            float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 285, r.getDisplayMetrics());
             lineChart.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int)px));
 
             //Add graph to parent view (Linear layout)
@@ -223,14 +234,14 @@ public class TabChartFragment extends Fragment {
             List<Entry> entries = dataEntries.get(i);
             LineDataSet dataSet = new LineDataSet(entries, label);
             dataSet.setDrawCircles(false);
-            dataSet.setLineWidth(1.5f);
+            dataSet.setLineWidth(3f);//was 1.5
             dataSet.setDrawValues(false);
-            dataSet.setColor(Color.parseColor("#283593"));
+            dataSet.setColor(Color.parseColor(getColorI(i)));
             LineData lineData = new LineData(dataSet);
 
             //Change graph parameters
             lineChart.setTouchEnabled(false);
-            lineChart.setDragEnabled(false);
+            lineChart.setDragEnabled(false);//was false
             lineChart.setPinchZoom(false);
             lineChart.setDrawGridBackground(false);
             lineChart.setAutoScaleMinMaxEnabled(false);
@@ -242,21 +253,40 @@ public class TabChartFragment extends Fragment {
             rightYAxis.setEnabled(false);
 
             YAxis leftYAxis = lineChart.getAxisLeft();
-            leftYAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+
+            //new formatter, basically a largeValueFormatter with padding added
+            leftYAxis.setValueFormatter(new IAxisValueFormatter() {
+                LargeValueFormatter lvf = new LargeValueFormatter();
+
+                @Override
+                public String getFormattedValue(float value, AxisBase axis) {
+                    String lvfLabel = lvf.getFormattedValue(value,axis);
+                    int n = lvfLabel.length();
+                    if(n > paddingLength) paddingLength = n;//so other graphs aren't thrown off
+                    for(int i = n; i < paddingLength; i++){
+                        lvfLabel = " " + lvfLabel;//add spaces
+                    }
+                    return lvfLabel;
+                }
+
+            });
+            //end new
+            leftYAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
             //Showing only max and min
-            leftYAxis.setLabelCount(2, true);
+            leftYAxis.setLabelCount(5, true);
             //If the parameter has a min and max set the Left Y Axis to the min and max
             if(!Double.isNaN(min) && !Double.isNaN(max))
             {
                 leftYAxis.setAxisMinimum((float)min);
 
                 float maxY = allGraphDataSingleton.getMaxYValue(label, currentTime, graphMax);
+                //new
+                maxY = formulateMaxY(maxY);
 
                 if(!Float.isNaN(maxY) && selectedParameterList.get(i).getMin() != Double.NaN){
                     leftYAxis.setAxisMaximum(maxY);
                 }
             }
-
             //Set the xAxis, max is the currentTime and the min is the current minus the total max displayed
             XAxis xAxis = lineChart.getXAxis();
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -270,5 +300,21 @@ public class TabChartFragment extends Fragment {
             //Refresh graph data
             lineChart.invalidate();
         }
+    }
+
+    private String getColorI(int i){
+        String [] colors = {"red","blue","green","aqua","fuchsia","lime",
+                "maroon","navy","olive","silver","purple","teal"};
+        int n = 12;
+        return colors[i%n];
+    }
+
+    private float formulateMaxY(float max){
+        float temp = max;
+        temp += max / 4;
+        if(temp <= 40)return temp;
+        //round to nearest multiple of 10
+        temp = (float) Math.ceil(temp/ 40) * 40;
+        return temp;
     }
 }
