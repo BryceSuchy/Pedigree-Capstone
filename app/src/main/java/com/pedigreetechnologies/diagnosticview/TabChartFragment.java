@@ -2,12 +2,14 @@ package com.pedigreetechnologies.diagnosticview;
 
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Paint; 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +17,15 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.LargeValueFormatter;
+import com.github.mikephil.charting.formatter.*;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.util.ArrayList;
@@ -54,6 +59,9 @@ public class TabChartFragment extends Fragment {
 
     //Issue with graph crashing when there is no data in the set, this is removed after the graph has more data
     Entry emptyEntryPlaceholder = (new Entry(0, 0));
+
+    //new padding var
+    public int paddingLength = 7;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -245,6 +253,26 @@ public class TabChartFragment extends Fragment {
             rightYAxis.setEnabled(false);
 
             YAxis leftYAxis = lineChart.getAxisLeft();
+
+
+            //new formatter, basically a largeValueFormatter with padding added
+            leftYAxis.setValueFormatter(new IAxisValueFormatter() {
+                LargeValueFormatter lvf = new LargeValueFormatter();
+
+                @Override
+                public String getFormattedValue(float value, AxisBase axis) {
+                    String lvfLabel = lvf.getFormattedValue(value,axis);
+                    int n = lvfLabel.length();
+                    if(n > paddingLength) paddingLength = n;//so other graphs aren't thrown off
+                    for(int i = n; i < paddingLength; i++){
+                        lvfLabel = " " + lvfLabel;//add spaces
+                    }
+                    return lvfLabel;
+                }
+
+            });
+            //end new
+
             leftYAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
             //Showing only max and min
             leftYAxis.setLabelCount(5, true);
@@ -278,7 +306,8 @@ public class TabChartFragment extends Fragment {
 
     private String getColorI(int i){
         String [] colors = {"red","blue","green","aqua","fuchsia","lime",
-                            "maroon","navy","olive","silver","purple","teal"};
+                "maroon","navy","olive","silver","purple","teal"};
+
         int n = 12;
         return colors[i%n];
     }
