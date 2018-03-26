@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+    <ToggleButton
+        android:background="@drawable/toggle_ab"
+        android:id="@+id/toggle_ab"
+        android:layout_width="140dp"
+        android:layout_height="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textOff=""
+        android:textOn=""
+        />
+</RelativeLayout>

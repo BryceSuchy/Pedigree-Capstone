@@ -2,7 +2,7 @@ package com.pedigreetechnologies.diagnosticview;
 
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.Paint; 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -254,6 +254,7 @@ public class TabChartFragment extends Fragment {
 
             YAxis leftYAxis = lineChart.getAxisLeft();
 
+
             //new formatter, basically a largeValueFormatter with padding added
             leftYAxis.setValueFormatter(new IAxisValueFormatter() {
                 LargeValueFormatter lvf = new LargeValueFormatter();
@@ -271,6 +272,7 @@ public class TabChartFragment extends Fragment {
 
             });
             //end new
+
             leftYAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
             //Showing only max and min
             leftYAxis.setLabelCount(5, true);
@@ -305,6 +307,7 @@ public class TabChartFragment extends Fragment {
     private String getColorI(int i){
         String [] colors = {"red","blue","green","aqua","fuchsia","lime",
                 "maroon","navy","olive","silver","purple","teal"};
+
         int n = 12;
         return colors[i%n];
     }
