@@ -63,7 +63,8 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {}
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
-            // Sets the correct image when the page changes, used incase the page gets changed by gestures
+            // Sets the correct image when the page changes, used in case the page gets changed by gestures
+            // TODO Crashes app when rotating the screen in graph view
             public void onPageSelected(int pagePosition) {
                 // Check if this is the page you want.
                 toggleAB = findViewById(R.id.toggle_ab);

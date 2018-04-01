@@ -22,7 +22,7 @@
         </activity>
 
         <activity android:name=".DiagnosticList"/>
-        <activity android:name=".ViewPagerFragmentActivity"/>
+        <activity android:name=".ViewPagerFragmentActivity" />
 
     </application>
 
