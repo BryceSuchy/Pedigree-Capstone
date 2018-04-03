@@ -153,55 +153,59 @@ public class TabChartFragment extends Fragment {
         long adjustedTime = currentTime - referenceTime;
 
         //Go through every graph and update the data if it is present
-        for(int i = 0; i < selectedParameterList.size(); i++){
-            //Get current graph label
-            dataLabel = selectedParameterList.get(i).getLabel();
-            //
-            latestValues = allGraphDataSingleton.getDataForUpdatePeriod(dataLabel, currentTime);
+        if(selectedParameterList == null){
+            System.out.print("selectedParameterList is empty");
+        } else {
+            for (int i = 0; i < selectedParameterList.size(); i++) {
+                //Get current graph label
+                dataLabel = selectedParameterList.get(i).getLabel();
+                //
+                latestValues = allGraphDataSingleton.getDataForUpdatePeriod(dataLabel, currentTime);
 
-            //Get the index of the current graph in the parent view
-            graphIndex = graphIndexMap.get(dataLabel);
-            //Get the graph to update
-            chart = lineChartArrayList.get(graphIndex);
+                //Get the index of the current graph in the parent view
+                graphIndex = graphIndexMap.get(dataLabel);
+                //Get the graph to update
+                chart = lineChartArrayList.get(graphIndex);
 
-            //Get the data to update
-            lineData = chart.getLineData();
-            set = lineData.getDataSetByIndex(0);
+                //Get the data to update
+                lineData = chart.getLineData();
+                set = lineData.getDataSetByIndex(0);
 
-            numberOfNewValues = latestValues.length;
+                numberOfNewValues = latestValues.length;
 
-            if(numberOfNewValues > 0) {
-                //Remove the placeholder if it is present
-                set.removeEntry(emptyEntryPlaceholder);
+                if (numberOfNewValues > 0) {
+                    //Remove the placeholder if it is present
+                    set.removeEntry(emptyEntryPlaceholder);
 
-                //Add all of the new values to the dataset
-                for (int j = 0; j < numberOfNewValues; j++) {
-                    dataPoint = latestValues[j];
-                    set.addEntry(new Entry(dataPoint.getTime(), dataPoint.getDataPoint()));
+                    //Add all of the new values to the dataset
+                    for (int j = 0; j < numberOfNewValues; j++) {
+                        dataPoint = latestValues[j];
+                        set.addEntry(new Entry(dataPoint.getTime(), dataPoint.getDataPoint()));
+                    }
                 }
+
+                //Update axis to move the graphs in realtime even if there are no new data points
+                XAxis xAxis = chart.getXAxis();
+                xAxis.setAxisMaximum(adjustedTime);
+                xAxis.setAxisMinimum(adjustedTime - graphMax);
+
+                YAxis leftYAxis = chart.getAxisLeft();
+
+                float maxY = allGraphDataSingleton.getMaxYValue(dataLabel, currentTime, graphMax);
+                //new
+                maxY = formulateMaxY(maxY);
+
+                if (!Float.isNaN(maxY) && selectedParameterList.get(i).getMin() != Double.NaN) {
+                    leftYAxis.setAxisMaximum(maxY);
+                }
+
+                //Tell the graph and datasets that they are updated
+                lineData.notifyDataChanged();
+                chart.notifyDataSetChanged();
+
+                //Refresh graph data
+                chart.invalidate();
             }
-
-            //Update axis to move the graphs in realtime even if there are no new data points
-            XAxis xAxis = chart.getXAxis();
-            xAxis.setAxisMaximum(adjustedTime);
-            xAxis.setAxisMinimum(adjustedTime - graphMax);
-
-            YAxis leftYAxis = chart.getAxisLeft();
-
-            float maxY = allGraphDataSingleton.getMaxYValue(dataLabel, currentTime, graphMax);
-            //new
-            maxY = formulateMaxY(maxY);
-
-            if(!Float.isNaN(maxY) && selectedParameterList.get(i).getMin() != Double.NaN){
-                leftYAxis.setAxisMaximum(maxY);
-            }
-
-            //Tell the graph and datasets that they are updated
-            lineData.notifyDataChanged();
-            chart.notifyDataSetChanged();
-
-            //Refresh graph data
-            chart.invalidate();
         }
     }
 

@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    tools:openDrawer="start"
+    android:launchMode="singleTop">
 
     <include
         layout="@layout/app_bar_main"
@@ -21,6 +22,17 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" >
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="50dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/d_select_text"
+            android:layout_above="@+id/go_btn"
+            android:layout_alignStart="@+id/d_select_text">
+        </ListView>
 
     </android.support.design.widget.NavigationView>
 

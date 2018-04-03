@@ -9,9 +9,18 @@
             android:id="@+id/add_preset"
             android:icon="@drawable/ic_add_box_black_24px"
             android:title="Add Preset" />
-        <group >
-            <item android:title="Preset 1" />
-            <item android:title="Preset 2" />
+        <group>
+            <item
+                android:id="@+id/radio1"
+                android:title="Preset 1"
+                android:checkable="true"
+                app:actionViewClass="android.widget.RadioButton"
+                android:inputType="phone"/>
+            <item
+                android:id="@+id/radio2"
+                android:title="Preset 2"
+                android:checkable="true"
+                app:actionViewClass="android.widget.RadioButton"/>
         </group>
         <item
             android:id="@+id/delete_preset"
@@ -24,15 +33,8 @@
     </group>
 
     <item android:title="Displays">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+        <group android:id="@+id/metrics">
+            <menu>
             <item
                 android:id="@+id/app_bar_switch1"
                 android:title="Metric 1"
@@ -40,8 +42,9 @@
             <item
                 android:id="@+id/app_bar_switch2"
                 android:title="Metric 2"
-                app:actionLayout="@layout/switch_item" ></item>
-        </menu>
+                app:actionLayout="@layout/switch_item" />
+            </menu>
+        </group>
     </item>
 
 </menu>

@@ -52,7 +52,7 @@ public class BluetoothScannerActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 SBluetoothDevice device = deviceAdapter.getItem(position);
-                Intent intent = new Intent(BluetoothScannerActivity.this.getApplicationContext(), DiagnosticList.class);
+                Intent intent = new Intent(BluetoothScannerActivity.this.getApplicationContext(), ViewPagerFragmentActivity.class);
                 intent.putExtra("macAddress", device.deviceAddress);
                 startActivity(intent);
             }

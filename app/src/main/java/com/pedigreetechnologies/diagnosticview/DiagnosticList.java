@@ -54,7 +54,7 @@ public class DiagnosticList extends AppCompatActivity {
         adapter = new ArrayAdapter<>(DiagnosticList.this,
                 android.R.layout.simple_list_item_activated_1, optionsArray);
 
-        listView = (ListView) findViewById(android.R.id.list);
+        listView = (ListView) findViewById(R.id.list1);
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
