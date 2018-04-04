@@ -37,7 +37,8 @@ public class TabChartFragment extends Fragment {
     //Singleton containing all graph data
     private AllGraphDataSingleton allGraphDataSingleton;
     //Parameters to be displayed, selected in previous activity
-    private ArrayList<DiagnosticParameter> selectedParameterList;
+    private ArrayList<DiagnosticParameter> selectedParameterList = new ArrayList(50);
+    private ArrayList<DiagnosticParameter> selectedParameterListTemp;
     //Contains the location of the graphs stored in lineChartArrayList by name
     private HashMap<String, Integer> graphIndexMap;
     //Data entries for the graphs
@@ -95,7 +96,16 @@ public class TabChartFragment extends Fragment {
         //Get the parameters from the parent activity
         Bundle extras = getArguments();
         if (extras != null) {
-            selectedParameterList = extras.getParcelableArrayList("selectedParameterList");
+            selectedParameterListTemp = extras.getParcelableArrayList("selectedParameterList");
+
+            for(int i = 0; i < selectedParameterListTemp.size(); i ++) {
+                DiagnosticParameter tempParm = selectedParameterListTemp.get(i);
+                if (Double.isNaN(tempParm.getMin()) || Double.isNaN(tempParm.getMax())) {
+                } else {
+                    selectedParameterList.add(selectedParameterListTemp.get(i));
+                }
+            }
+
         }
 
         //Build the initial graphs from the selected parameters

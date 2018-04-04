@@ -304,13 +304,8 @@ public class TabGaugeFragment extends Fragment {
 
                     }
                 }
-
             }
-
-
         }
-
-
 
         //Handler to update the gauges with the most recent values
         gaugeHandler = new Handler() {

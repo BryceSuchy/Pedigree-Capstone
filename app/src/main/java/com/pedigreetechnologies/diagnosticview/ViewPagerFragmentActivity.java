@@ -70,8 +70,9 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
                 toggleAB = findViewById(R.id.toggle_ab);
                 if (pagePosition == 1)
                     toggleAB.setChecked(true);
-                else
+                else if (pagePosition == 0)
                     toggleAB.setChecked(false);
+
             }
         });
 
