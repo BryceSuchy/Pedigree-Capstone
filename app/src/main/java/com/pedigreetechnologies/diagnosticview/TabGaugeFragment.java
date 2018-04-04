@@ -90,7 +90,7 @@ public class TabGaugeFragment extends Fragment {
 
                     //Add the views to the textMetricLayout
                     if(view.getParent()!=null)
-                        ((ViewGroup)view.getParent()).removeView(view);
+                    ((ViewGroup)view.getParent()).removeView(view);
                     textMetricLayout.addView(view);
                 }
 
