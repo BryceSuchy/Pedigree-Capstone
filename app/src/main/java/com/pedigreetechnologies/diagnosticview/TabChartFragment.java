@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.text.Layout;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -48,6 +50,8 @@ public class TabChartFragment extends Fragment {
     //Parent layout that contains the graphs
     private LinearLayout graphLinearLayout;
     private long referenceTime;
+    View lineView;
+    View view = null;
 
     //Handler and thread to update the graphs
     private Handler timerHandler;
@@ -63,6 +67,7 @@ public class TabChartFragment extends Fragment {
 
     //new padding var
     public int paddingLength = 7;
+    ScrollView scrollView;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -77,7 +82,7 @@ public class TabChartFragment extends Fragment {
             return null;
         }
 
-        ScrollView scrollView = (ScrollView)inflater.inflate(R.layout.tab_chart_layout, container, false);
+        scrollView = (ScrollView)inflater.inflate(R.layout.tab_chart_layout, container, false);
 
         allGraphDataSingleton = AllGraphDataSingleton.getInstance();
         dataEntries = new ArrayList<>();
@@ -229,10 +234,24 @@ public class TabChartFragment extends Fragment {
             Resources r = getResources();
             float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 285, r.getDisplayMetrics());
             lineChart.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int)px));
+            lineChart.setBackgroundColor((Color.parseColor(getColorI(i))));
+            lineChart.getBackground().setAlpha(50);
 
             //Add graph to parent view (Linear layout)
             lineChartArrayList.add(lineChart);
             graphLinearLayout.addView(lineChart);
+
+            // Adds horizontal line below graphs
+            lineView = new View(this.getContext());
+            lineView.setVisibility(View.VISIBLE);
+            lineView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 80));
+            lineView.setBackgroundColor(Color.WHITE);
+            view = lineView;
+
+            if(view.getParent()!=null)
+                ((ViewGroup)view.getParent()).removeView(view);
+            graphLinearLayout.addView(view);
+
 
             //Get the variables for creating the graph
             DiagnosticParameter parameter = selectedParameterList.get(i);
@@ -246,7 +265,8 @@ public class TabChartFragment extends Fragment {
             dataSet.setDrawCircles(false);
             dataSet.setLineWidth(3f);//was 1.5
             dataSet.setDrawValues(false);
-            dataSet.setColor(Color.parseColor(getColorI(i)));
+            //dataSet.setColor(Color.parseColor(getColorI(i)));
+            dataSet.setColor(Color.BLACK);
             LineData lineData = new LineData(dataSet);
 
             //Change graph parameters

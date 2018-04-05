@@ -11,9 +11,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuAdapter;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SoundEffectConstants;
@@ -36,6 +39,7 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        invalidateOptionsMenu();
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_main);
 
@@ -67,7 +71,6 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
             // TODO Crashes app when rotating the screen in graph view
             public void onPageSelected(int pagePosition) {
                 // Check if this is the page you want.
-                toggleAB = findViewById(R.id.toggle_ab);
                 if (pagePosition == 1)
                     toggleAB.setChecked(true);
                 else if (pagePosition == 0)
@@ -113,7 +116,6 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-
         // Switch button that changes between gauge and graph view
         toggleAB = menu.findItem(R.id.mytoggle).getActionView().findViewById(R.id.toggle_ab);
         toggleAB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
