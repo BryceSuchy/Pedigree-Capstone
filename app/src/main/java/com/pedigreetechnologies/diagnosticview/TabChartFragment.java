@@ -2,7 +2,8 @@ package com.pedigreetechnologies.diagnosticview;
 
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Paint; 
+import android.graphics.Paint;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -234,8 +235,14 @@ public class TabChartFragment extends Fragment {
             Resources r = getResources();
             float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 285, r.getDisplayMetrics());
             lineChart.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int)px));
-            lineChart.setBackgroundColor((Color.parseColor(getColorI(i))));
-            lineChart.getBackground().setAlpha(50);
+
+            // Creating background image for graphs
+            GradientDrawable shape = new GradientDrawable();
+            shape.setShape(GradientDrawable.RECTANGLE);
+            shape.setCornerRadii(new float[] {70,70,70,70,70,70,70,70});
+            shape.setColor(Color.parseColor(getColorI(i)));
+            shape.setAlpha(50);
+            lineChart.setBackground(shape);
 
             //Add graph to parent view (Linear layout)
             lineChartArrayList.add(lineChart);
