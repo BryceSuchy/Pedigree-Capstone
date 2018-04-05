@@ -12,7 +12,7 @@ import java.util.Locale;
  * Created by Joe on 4/23/2017.
  */
 
-public class TimeAxisValueFormatter implements IAxisValueFormatter{
+public class TimeAxisValueFormatter implements IAxisValueFormatter {
 
     private long referenceTimestamp; // minimum timestamp in your data set
     private DateFormat mDataFormat;

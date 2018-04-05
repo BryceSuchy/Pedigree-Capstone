@@ -9,23 +9,17 @@ import java.util.Comparator;
 public class DiagnosticParameterComparator implements Comparator<DiagnosticParameter> {
 
     public int compare(DiagnosticParameter diagnosticParameter1, DiagnosticParameter diagnosticParameter2) {
-        if(diagnosticParameter1.getDataType() - diagnosticParameter2.getDataType() < 0){
+        if (diagnosticParameter1.getDataType() - diagnosticParameter2.getDataType() < 0) {
             return -1;
-        }
-
-        else if(diagnosticParameter1.getDataType() - diagnosticParameter2.getDataType() == 0){
-            if(diagnosticParameter1.getParameterID() - diagnosticParameter2.getParameterID() < 0){
+        } else if (diagnosticParameter1.getDataType() - diagnosticParameter2.getDataType() == 0) {
+            if (diagnosticParameter1.getParameterID() - diagnosticParameter2.getParameterID() < 0) {
                 return -1;
-            }
-            else if(diagnosticParameter1.getParameterID() - diagnosticParameter2.getParameterID() == 0){
+            } else if (diagnosticParameter1.getParameterID() - diagnosticParameter2.getParameterID() == 0) {
                 return 0;
-            }
-            else{
+            } else {
                 return 1;
             }
-        }
-
-        else{
+        } else {
             return 1;
         }
     }

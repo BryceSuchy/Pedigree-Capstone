@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:gauge="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,33 +15,31 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/gaugeLayout1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_weight="1"
-                android:id="@+id/gaugeLayout1">
-            </LinearLayout>
+                android:orientation="vertical"></LinearLayout>
 
             <LinearLayout
+                android:id="@+id/gaugeLayout2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_weight="1"
-                android:id="@+id/gaugeLayout2">
-            </LinearLayout>
+                android:orientation="vertical"></LinearLayout>
 
-            <include layout="@layout/gauge_draw"
-                android:id="@+id/gaugeholder"/>
+            <include
+                android:id="@+id/gaugeholder"
+                layout="@layout/gauge_draw" />
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/textMetricLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_weight="1"
-            android:id="@+id/textMetricLayout">
-        </LinearLayout>
+            android:orientation="vertical"></LinearLayout>
 
 
     </LinearLayout>
