@@ -4,36 +4,25 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.SoundEffectConstants;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import java.io.IOException;
@@ -44,8 +33,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.Vector;
-
-import de.nitri.gauge.Gauge;
 
 
 public class ViewPagerFragmentActivity extends AppCompatActivity {
@@ -103,8 +90,11 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
 
         // Adding a listener for when the page changes
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            public void onPageScrollStateChanged(int state) {}
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+            public void onPageScrollStateChanged(int state) {
+            }
+
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
 
             // Sets the correct image when the page changes, used incase the page gets changed by gestures
             public void onPageSelected(int pagePosition) {
@@ -121,9 +111,6 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(ViewPagerFragmentActivity.this,
                 android.R.layout.simple_list_item_activated_1, optionsArray);
 
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-
-
         final NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -131,9 +118,12 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         // set item as selected to persist highlight
                         menuItem.setChecked(true);
-                        //Menu menu = navigationView.getMenu();
-                        //if(mDrawerLayout.isDrawerVisible() = true) {
-                            sendMessage(navigationView);
+                        //NavigationView navigationView1 = findViewById(R.id.nav_view);
+                        Menu menu = navigationView.getMenu();
+                        // menu.add(2,i,1,parameter.getLabel()).setActionView(R.layout.switch_item);
+                        menuItem.getActionView().setActivated(true);
+                        //menu.findItem(R.id.metrics).getActionView().findViewById(R.id.toggle_ab);
+                        //sendMessage(navigationView);
                         //}
                         //mDrawerLayout.openDrawer(Gravity);
                         // close drawer when item is tapped
@@ -145,48 +135,9 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
                         return true;
                     }
                 });
-        //Menu menu = navigationView.getMenu();
-        //menu.add("Hello");
-        //menu.add("Hello3");
-        //System.out.println(listView.getAdapter().getCount());
-
-
-        listView = (ListView) findViewById(android.R.id.list);
-        listView.setAdapter(adapter);
-
-
-
-        //listView.setOnItemClickListener(new AdapterView.Onc{
-        //public void onPageLoad
-
-
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
-        //When an item is selected it will display the chosen items at the bottom of the screen
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //String selectedItem = (String)(parent.getItemAtPosition(position));
-                //Log.v(TAG, selectedItem);
-
-                SparseBooleanArray checked = listView.getCheckedItemPositions();
-
-
-                ArrayList<String> selectedArray = new ArrayList<>();
-                for(int i = 0; i < listView.getAdapter().getCount(); i++){
-                    NavigationView navigationView = findViewById(R.id.nav_view);
-                    Menu menu = navigationView.getMenu();
-                    menu.add(2,i,1,parameterList.get(i).getLabel()).setActionView(R.layout.switch_item);
-
-                    if(checked.get(i)){
-                        selectedArray.add(parameterList.get(i).getLabel());
-                    }
-                }
-            }
-        });
 
         //Connect to the sensor and load the metrics
-        ViewPagerFragmentActivity.Load load = new  ViewPagerFragmentActivity.Load();
+        ViewPagerFragmentActivity.Load load = new ViewPagerFragmentActivity.Load();
         load.execute();
 
     }
@@ -210,18 +161,18 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
 
         Collections.sort(Arrays.asList(parameters), new DiagnosticParameterComparator());
 
-        for(int i = 0; i < parameters.length; i++){
+        for (int i = 0; i < parameters.length; i++) {
             sortedArray.add(parameters[i]);
         }
         return sortedArray;
     }
 
     //Gets list of chosen items and moves to the next activity
-    public void sendMessage(View view){
+    public void sendMessage(View view) {
         SparseBooleanArray checked = listView.getCheckedItemPositions();
         ArrayList<DiagnosticParameter> selectedParameterList = new ArrayList<>();
-        for(int i = 0; i < listView.getAdapter().getCount(); i++){
-            if(checked.get(i)){
+        for (int i = 0; i < listView.getAdapter().getCount(); i++) {
+            if (checked.get(i)) {
                 selectedParameterList.add(parameterList.get(i));
             }
         }
@@ -249,6 +200,7 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
     class Load extends AsyncTask<String, String, String> {
 
         ProgressDialog progDailog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -291,7 +243,7 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
             }
 
             //Wait until the list of metrics has been shorted to only reflect the correct data type
-            while(!messageProcessor.hasListShortened) {
+            while (!messageProcessor.hasListShortened) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -308,9 +260,15 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
         protected void onPostExecute(String unused) {
             super.onPostExecute(unused);
 
+            NavigationView navigationView1 = findViewById(R.id.nav_view);
+            Menu menu = navigationView1.getMenu();
+            int i = 0;
             //Populate list of available parameters supported by the sensor
-            for(DiagnosticParameter parameter : parameterList){
+            for (DiagnosticParameter parameter : parameterList) {
                 optionsArray.add(parameter.getLabel());
+                i += 1;
+
+                menu.add(R.id.metrics, i, Menu.NONE, parameter.getLabel()).setActionView(R.layout.switch_item);
             }
 
             adapter.notifyDataSetChanged();
@@ -350,15 +308,14 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
         messageProcessor.setDataConnection(connection);
         messageProcessor.setParameterList(parameterList);
 
-        if(!connection.isAlive()){
+        if (!connection.isAlive()) {
             connection.start();
         }
 
-        if(!messageProcessor.isAlive()){
+        if (!messageProcessor.isAlive()) {
             messageProcessor.start();
         }
     }
-
 
     /**
      * Initialise the fragments to be paged
@@ -369,15 +326,13 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
         fragments.add(Fragment.instantiate(this, TabGaugeFragment.class.getName()));
         fragments.add(Fragment.instantiate(this, TabChartFragment.class.getName()));
 
-        for(int i = 0; i < fragments.size(); i++){
+        for (int i = 0; i < fragments.size(); i++) {
             fragments.get(i).setArguments(extras);
         }
 
-        this.mPagerAdapter  = new PagerAdapter(super.getSupportFragmentManager(), fragments);
-        pager = (ViewPager)super.findViewById(R.id.viewpager);
+        this.mPagerAdapter = new PagerAdapter(super.getSupportFragmentManager(), fragments);
+        pager = (ViewPager) super.findViewById(R.id.viewpager);
         pager.setAdapter(this.mPagerAdapter);
-
-
     }
 
     @Override
@@ -398,8 +353,7 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
 
         // Switch button that changes between gauge and graph view
         toggleAB = menu.findItem(R.id.mytoggle).getActionView().findViewById(R.id.toggle_ab);
-        toggleAB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-        {
+        toggleAB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
@@ -408,15 +362,13 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
                     // Switches to graph view
                     // pagePosition is redundant but is used for pageListener
                     pagePosition = 1;
-                    pager.setCurrentItem(pagePosition,true);
+                    pager.setCurrentItem(pagePosition, true);
 
-                }
-                else
-                {
+                } else {
                     // Switches to gauge view
                     // pagePosition is redundant but is used for pageListener
                     pagePosition = 0;
-                    pager.setCurrentItem(pagePosition,true);
+                    pager.setCurrentItem(pagePosition, true);
                 }
             }
         });
@@ -431,14 +383,7 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        //if (id == R.id.action_settings) {
-        //    return true;
-        //}
-
         return super.onOptionsItemSelected(item);
     }
 
 }
-
-

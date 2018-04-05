@@ -12,15 +12,15 @@
         <group>
             <item
                 android:id="@+id/radio1"
-                android:title="Preset 1"
                 android:checkable="true"
-                app:actionViewClass="android.widget.RadioButton"
-                android:inputType="phone"/>
+                android:inputType="phone"
+                android:title="Preset 1"
+                app:actionViewClass="android.widget.RadioButton" />
             <item
                 android:id="@+id/radio2"
-                android:title="Preset 2"
                 android:checkable="true"
-                app:actionViewClass="android.widget.RadioButton"/>
+                android:title="Preset 2"
+                app:actionViewClass="android.widget.RadioButton" />
         </group>
         <item
             android:id="@+id/delete_preset"
@@ -32,19 +32,10 @@
             android:title="Upload CSV" />
     </group>
 
-    <item android:title="Displays">
-        <group android:id="@+id/metrics">
-            <menu>
-            <item
-                android:id="@+id/app_bar_switch1"
-                android:title="Metric 1"
-                app:actionLayout="@layout/switch_item" />
-            <item
-                android:id="@+id/app_bar_switch2"
-                android:title="Metric 2"
-                app:actionLayout="@layout/switch_item" />
-            </menu>
-        </group>
-    </item>
+    <group android:id="@+id/metrics">
+        <item
+            android:checkable="false"
+            android:title="Displays"></item>
+    </group>
 
 </menu>
