@@ -252,7 +252,7 @@ public class TabChartFragment extends Fragment {
             lineView = new View(this.getContext());
             lineView.setVisibility(View.VISIBLE);
             lineView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 80));
-            lineView.setBackgroundColor(Color.WHITE);
+            lineView.setBackgroundColor(Color.parseColor("#fafafa"));
             view = lineView;
 
             if(view.getParent()!=null)

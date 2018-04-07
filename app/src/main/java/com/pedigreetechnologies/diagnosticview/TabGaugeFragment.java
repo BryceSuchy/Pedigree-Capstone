@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import de.nitri.gauge.Gauge;
 
 public class TabGaugeFragment extends Fragment {
+
     private ArrayList<DiagnosticParameter> selectedParameterList;
     private Handler gaugeHandler;
     View view = null;
@@ -111,6 +112,15 @@ public class TabGaugeFragment extends Fragment {
                     //Set a tag so you know which view is attached to what label
                     view.setTag(tempParm.getLabel());
 
+                    // Add gauge name under gauge
+                    TextView textView = new TextView(this.getContext());
+                    textView.setLayoutParams(new ViewGroup.LayoutParams((int) (width / 2), ViewGroup.LayoutParams.WRAP_CONTENT));
+                    textView.setText(tempParm.getLabel());
+                    textView.setTextColor(Color.BLACK);
+                    textView.setMinLines(2);
+                    textView.setGravity(Gravity.CENTER);
+                    textView.setPadding(5,0,0,100);
+
                     //Add the views to the parents left to right
                     if(layoutValue % 2 == 0){
 
@@ -119,16 +129,10 @@ public class TabGaugeFragment extends Fragment {
                             ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutLeft.addView(view);
 
-                        // Add gauge name under gauge
-                        TextView textView = new TextView(this.getContext());
-                        textView.setLayoutParams(new ViewGroup.LayoutParams((int) (width / 2), ViewGroup.LayoutParams.WRAP_CONTENT));
-                        textView.setText(tempParm.getLabel());
-                        textView.setTextColor(Color.BLACK);
-                        textView.setMinLines(2);
-                        textView.setGravity(Gravity.CENTER);
-                        textView.setPadding(5,0,0,100);
+
                         view = textView;
 
+                        // Adds Text
                         if(view.getParent()!=null)
                             ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutLeft.addView(view);
@@ -141,16 +145,9 @@ public class TabGaugeFragment extends Fragment {
                             ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutRight.addView(view);
 
-                        // Add gauge name under gauge
-                        TextView textView = new TextView(this.getContext());
-                        textView.setLayoutParams(new ViewGroup.LayoutParams((int) (width / 2), ViewGroup.LayoutParams.WRAP_CONTENT));
-                        textView.setText(tempParm.getLabel());
-                        textView.setTextColor(Color.BLACK);
-                        textView.setMinLines(2);
-                        textView.setGravity(Gravity.CENTER);
-                        textView.setPadding(5,0,0,100);
                         view = textView;
 
+                        // Adds Text
                         if(view.getParent()!=null)
                             ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutRight.addView(view);
@@ -237,6 +234,15 @@ public class TabGaugeFragment extends Fragment {
                     //Set a tag so you know which view is attached to what label
                     view.setTag(tempParm.getLabel());
 
+                    // Add gauge name under gauge
+                    TextView textView = new TextView(this.getContext());
+                    textView.setLayoutParams(new ViewGroup.LayoutParams((int) (width / 3), ViewGroup.LayoutParams.WRAP_CONTENT));
+                    textView.setText(tempParm.getLabel());
+                    textView.setTextColor(Color.BLACK);
+                    textView.setMinLines(2);
+                    textView.setGravity(Gravity.CENTER);
+                    textView.setPadding(5,0,0,100);
+
                     //Add the views to the parents left to right
                     if(layoutValue % 3 == 0){
 
@@ -245,16 +251,9 @@ public class TabGaugeFragment extends Fragment {
                             ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutLeft.addView(view);
 
-                        // Add gauge name under gauge
-                        TextView textView = new TextView(this.getContext());
-                        textView.setLayoutParams(new ViewGroup.LayoutParams((int) (width / 3), ViewGroup.LayoutParams.WRAP_CONTENT));
-                        textView.setText(tempParm.getLabel());
-                        textView.setTextColor(Color.BLACK);
-                        textView.setMinLines(2);
-                        textView.setGravity(Gravity.CENTER);
-                        textView.setPadding(5,0,0,100);
                         view = textView;
 
+                        // Adds Text
                         if(view.getParent()!=null)
                             ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutLeft.addView(view);
@@ -267,16 +266,9 @@ public class TabGaugeFragment extends Fragment {
                             ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutMiddle.addView(view);
 
-                        // Add gauge name under gauge
-                        TextView textView = new TextView(this.getContext());
-                        textView.setLayoutParams(new ViewGroup.LayoutParams((int) (width / 3), ViewGroup.LayoutParams.WRAP_CONTENT));
-                        textView.setText(tempParm.getLabel());
-                        textView.setTextColor(Color.BLACK);
-                        textView.setMinLines(2);
-                        textView.setGravity(Gravity.CENTER);
-                        textView.setPadding(5,0,0,100);
                         view = textView;
 
+                        // Adds Text
                         if(view.getParent()!=null)
                             ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutMiddle.addView(view);
@@ -288,16 +280,9 @@ public class TabGaugeFragment extends Fragment {
                             ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutRight.addView(view);
 
-                        // Add gauge name under gauge
-                        TextView textView = new TextView(this.getContext());
-                        textView.setLayoutParams(new ViewGroup.LayoutParams((int) (width / 3), ViewGroup.LayoutParams.WRAP_CONTENT));
-                        textView.setText(tempParm.getLabel());
-                        textView.setTextColor(Color.BLACK);
-                        textView.setMinLines(2);
-                        textView.setGravity(Gravity.CENTER);
-                        textView.setPadding(5,0,0,100);
                         view = textView;
 
+                        // Adds Text
                         if(view.getParent()!=null)
                             ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutRight.addView(view);
