@@ -25,9 +25,21 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+
+import org.supercsv.cellprocessor.Optional;
+import org.supercsv.cellprocessor.ift.CellProcessor;
+import org.supercsv.io.CsvMapWriter;
+import org.supercsv.io.ICsvMapReader;
+import org.supercsv.io.ICsvMapWriter;
+import org.supercsv.prefs.CsvPreference;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TabChartFragment extends Fragment {
 
@@ -58,6 +70,13 @@ public class TabChartFragment extends Fragment {
     private Handler timerHandler;
     // Number of updates per second ex: 1000/4 = approx 4 times a second
     private int updateTime = 1000 / 2;
+    //for use in creating the csv file with the data
+    private CellProcessor[] processors = null;
+    private String[] headers = null;
+    //TODO consider putting this declaration elsewhere
+    private File csvFile;
+    private FileWriter csvFileWriter = null;
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -139,7 +158,29 @@ public class TabChartFragment extends Fragment {
                 Log.v("ToStrings", selectedParameterList.get(i).toString());
             }
             createGraphs(currentTime);
+
+            //begin code to create the cell processors. The Cell processors are used when creating the csv report
+            //make a processor for each selected parameter
+            processors = new CellProcessor[selectedParameterList.size()];
+            for(int k = 0; k < selectedParameterList.size(); k++){
+                processors[k] = new Optional();
+            }
+            //make a header for each diagnostic parameter based on the name
+            for(int n=0; n < selectedParameterList.size(); n++){
+                headers[n] = selectedParameterList.get(n).getLabel();
+            }
+
         }
+
+        //create new file to write the CSV to
+        csvFile = new File(getContext().getFilesDir(), "testCSV.csv");
+        try {
+            FileWriter csvFileWriter = new FileWriter(csvFile);
+        }
+        catch(IOException ioe){
+            System.out.println("Error opening the file writer for the CSV file");
+        }
+
 
         return scrollView;
     }
@@ -156,6 +197,10 @@ public class TabChartFragment extends Fragment {
         int numberOfNewValues;
 
         long adjustedTime = currentTime - referenceTime;
+
+        //this is for the csv record. Store the data in a map first then after write to the file. Google supercsv csvMapWriter for more info
+        final Map<String, Object> csvMap = new HashMap<String, Object>();
+
 
         //Go through every graph and update the data if it is present
         for (int i = 0; i < selectedParameterList.size(); i++) {
@@ -205,8 +250,22 @@ public class TabChartFragment extends Fragment {
             lineData.notifyDataChanged();
             chart.notifyDataSetChanged();
 
+            //csv report stuff. Putting the data for each selected parameter into the map
+            //latestValues is an array of Data points, for now just grabbing the first item in the array but ultimately unsure of this
+            //TODO look into this and see what data it's actually pulling
+            if(headers != null) {
+                if (headers[i] != null) {
+                    csvMap.put(headers[i], latestValues[0]);
+                }
+            }
             //Refresh graph data
             chart.invalidate();
+        }
+
+        //code for writing out the csv map to the csv file,
+        //TODO check on performance. Each time updateGraphs() is called a small IO operation will be done here
+        try {
+            ICsvMapWriter mapWriter = new CsvMapWriter(csvFileWriter(csvFile), CsvPreference.STANDARD_PREFERENCE);
         }
     }
 
