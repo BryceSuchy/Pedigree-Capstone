@@ -70,12 +70,7 @@ public class TabChartFragment extends Fragment {
     private Handler timerHandler;
     // Number of updates per second ex: 1000/4 = approx 4 times a second
     private int updateTime = 1000 / 2;
-    //for use in creating the csv file with the data
-    private CellProcessor[] processors = null;
-    private String[] headers;
-    //TODO consider putting this declaration elsewhere
-    private File csvFile;
-    private FileWriter csvFileWriter;
+
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -159,23 +154,9 @@ public class TabChartFragment extends Fragment {
             }
             createGraphs(currentTime);
 
-            //begin code to create the cell processors. The Cell processors are used when creating the csv report
-            //make a processor for each selected parameter - using optional() for all right now
-            processors = new CellProcessor[selectedParameterList.size()];
-            for(int k = 0; k < selectedParameterList.size(); k++){
-                processors[k] = new Optional();
-            }
 
-            headers = new String[selectedParameterList.size()];
-            //make a header for each diagnostic parameter based on the label
-            for(int n=0; n < selectedParameterList.size(); n++){
-                headers[n] = selectedParameterList.get(n).getLabel();
-            }
 
         }
-
-        //create new file to write the CSV to
-           csvFile = new File(getContext().getFilesDir(), "testCSV.csv");
 
 
 
@@ -247,35 +228,14 @@ public class TabChartFragment extends Fragment {
             lineData.notifyDataChanged();
             chart.notifyDataSetChanged();
 
-            //csv report stuff. Putting the data for each selected parameter into the map
-            //latestValues is an array of Data points, for now just grabbing the first item in the array but ultimately unsure of this
-            //TODO look into this and see what data it's actually pulling
-//            if(headers != null) {
-//                if (headers[i] != null && latestValues != null) {
-//                    csvMap.put(headers[i], latestValues[0]);
-//                }
-//            }
-            //write this all in an activity that will be launched when pushing the export csv button
-            //
-            //for each metric grab the arraylist of SensorDataPoints using the allGraphDataSingleton graphData() method
-            //go through each arrayList of sensorDataPoints and make each row in the csv a list of data for a specifc metric
-            //ie each row = all the data for one metric
+
 
 
             //Refresh graph data
             chart.invalidate();
         }
 
-        //code for writing out the csv map to the csv file,
-        //TODO check on performance. Each time updateGraphs() is called a small IO operation will be done here
-        ICsvMapWriter mapWriter = null;
-        try {
-            mapWriter = new CsvMapWriter(new FileWriter (csvFile), CsvPreference.STANDARD_PREFERENCE);
-        }
-        catch(IOException ioe)
-        {
-            System.out.println("File writing failed");
-        }
+
     }
 
     private void createGraphs(long currentTime) {

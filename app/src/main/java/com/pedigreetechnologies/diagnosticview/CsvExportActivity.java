@@ -60,7 +60,7 @@ public class CsvExportActivity extends Activity {
 
             //set each item in the master list to be a list of sensorDataPoints taken from getGraphData();
             //TODO figure out how the key paramter works for getGraphData()
-            masterList.set(i, allGraphDataSingleton.getGraphData(/*key*/);)
+            //masterList.set(i, allGraphDataSingleton.getGraphData(/*key*/);)
 
 
         }
