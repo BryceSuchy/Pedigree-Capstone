@@ -175,13 +175,8 @@ public class TabChartFragment extends Fragment {
         }
 
         //create new file to write the CSV to
-//        try {
            csvFile = new File(getContext().getFilesDir(), "testCSV.csv");
-//            //FileWriter csvFileWriter = new FileWriter(csvFile);
-//        }
-//        catch(IOException ioe){
-//            System.out.println("Error opening the file writer for the CSV file");
-//        }
+
 
 
         return scrollView;
@@ -260,6 +255,8 @@ public class TabChartFragment extends Fragment {
 //                    csvMap.put(headers[i], latestValues[0]);
 //                }
 //            }
+            //write this all in an activity that will be launched when pushing the export csv button
+            //
             //for each metric grab the arraylist of SensorDataPoints using the allGraphDataSingleton graphData() method
             //go through each arrayList of sensorDataPoints and make each row in the csv a list of data for a specifc metric
             //ie each row = all the data for one metric
