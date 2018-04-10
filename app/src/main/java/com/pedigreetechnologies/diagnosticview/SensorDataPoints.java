@@ -23,5 +23,8 @@ public class SensorDataPoints {
         return time;
     }
 
+    public String toString(){
+        return "[" + dataPoint + "]" + "{" + time + "}";
+    }
 
 }

@@ -72,10 +72,10 @@ public class TabChartFragment extends Fragment {
     private int updateTime = 1000 / 2;
     //for use in creating the csv file with the data
     private CellProcessor[] processors = null;
-    private String[] headers = null;
+    private String[] headers;
     //TODO consider putting this declaration elsewhere
     private File csvFile;
-    private FileWriter csvFileWriter = null;
+    private FileWriter csvFileWriter;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -160,12 +160,14 @@ public class TabChartFragment extends Fragment {
             createGraphs(currentTime);
 
             //begin code to create the cell processors. The Cell processors are used when creating the csv report
-            //make a processor for each selected parameter
+            //make a processor for each selected parameter - using optional() for all right now
             processors = new CellProcessor[selectedParameterList.size()];
             for(int k = 0; k < selectedParameterList.size(); k++){
                 processors[k] = new Optional();
             }
-            //make a header for each diagnostic parameter based on the name
+
+            headers = new String[selectedParameterList.size()];
+            //make a header for each diagnostic parameter based on the label
             for(int n=0; n < selectedParameterList.size(); n++){
                 headers[n] = selectedParameterList.get(n).getLabel();
             }
@@ -173,13 +175,13 @@ public class TabChartFragment extends Fragment {
         }
 
         //create new file to write the CSV to
-        csvFile = new File(getContext().getFilesDir(), "testCSV.csv");
-        try {
-            FileWriter csvFileWriter = new FileWriter(csvFile);
-        }
-        catch(IOException ioe){
-            System.out.println("Error opening the file writer for the CSV file");
-        }
+//        try {
+           csvFile = new File(getContext().getFilesDir(), "testCSV.csv");
+//            //FileWriter csvFileWriter = new FileWriter(csvFile);
+//        }
+//        catch(IOException ioe){
+//            System.out.println("Error opening the file writer for the CSV file");
+//        }
 
 
         return scrollView;
@@ -253,19 +255,29 @@ public class TabChartFragment extends Fragment {
             //csv report stuff. Putting the data for each selected parameter into the map
             //latestValues is an array of Data points, for now just grabbing the first item in the array but ultimately unsure of this
             //TODO look into this and see what data it's actually pulling
-            if(headers != null) {
-                if (headers[i] != null) {
-                    csvMap.put(headers[i], latestValues[0]);
-                }
-            }
+//            if(headers != null) {
+//                if (headers[i] != null && latestValues != null) {
+//                    csvMap.put(headers[i], latestValues[0]);
+//                }
+//            }
+            //for each metric grab the arraylist of SensorDataPoints using the allGraphDataSingleton graphData() method
+            //go through each arrayList of sensorDataPoints and make each row in the csv a list of data for a specifc metric
+            //ie each row = all the data for one metric
+
+
             //Refresh graph data
             chart.invalidate();
         }
 
         //code for writing out the csv map to the csv file,
         //TODO check on performance. Each time updateGraphs() is called a small IO operation will be done here
+        ICsvMapWriter mapWriter = null;
         try {
-            ICsvMapWriter mapWriter = new CsvMapWriter(csvFileWriter(csvFile), CsvPreference.STANDARD_PREFERENCE);
+            mapWriter = new CsvMapWriter(new FileWriter (csvFile), CsvPreference.STANDARD_PREFERENCE);
+        }
+        catch(IOException ioe)
+        {
+            System.out.println("File writing failed");
         }
     }
 
