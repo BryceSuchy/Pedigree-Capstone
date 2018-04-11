@@ -1,12 +1,16 @@
 package com.pedigreetechnologies.diagnosticview;
 
+import android.app.Application;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -98,28 +102,49 @@ public class TabGaugeFragment extends Fragment {
                 //If there is a min and a max create a gauge view
                 else {
 
+                    // Converting dp to pixels for use with displaying gauges
+                    Resources r = getResources();
+                    float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, r.getDisplayMetrics());
+
+                    // Creating background image
+                    GradientDrawable shapeG = new GradientDrawable();
+                    shapeG.setShape(GradientDrawable.RECTANGLE);
+                    shapeG.setCornerRadii(new float[] {100,100,100,100,0,0,0,0});
+                    shapeG.setColor(Color.parseColor(TabChartFragment.getColorI(i)));
+                    shapeG.setAlpha(50);
+
                     layoutValue ++;
                     String gaugeID = tempParm.getLabel().replaceAll("-%\\s+","").replaceAll("\\W", "");
                     int resID = getResources().getIdentifier(gaugeID, "id", getActivity().getPackageName());
                     Gauge gauge = relativeLayout.findViewById(resID);
                     gauge.setVisibility(Gauge.VISIBLE);
-                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((int) (width / 2), (int) (width / 2));
+                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(((int)((width / 2) - px)), (int) (width / 2));
                     gauge.setLayoutParams(layoutParams);
                     gauge.setValue(0);
                     gauge.invalidate();
+                    gauge.setBackground(shapeG);
                     view = gauge;
 
                     //Set a tag so you know which view is attached to what label
                     view.setTag(tempParm.getLabel());
 
+                    // Creating background image
+                    GradientDrawable shape = new GradientDrawable();
+                    shape.setShape(GradientDrawable.RECTANGLE);
+                    shape.setCornerRadii(new float[] {0,0,0,0,100,100,100,100});
+                    shape.setColor(Color.parseColor(TabChartFragment.getColorI(i)));
+                    shape.setAlpha(50);
+
                     // Add gauge name under gauge
                     TextView textView = new TextView(this.getContext());
-                    textView.setLayoutParams(new ViewGroup.LayoutParams((int) (width / 2), ViewGroup.LayoutParams.WRAP_CONTENT));
+                    textView.setLayoutParams(new ViewGroup.LayoutParams(((int)((width / 2) - px)), ViewGroup.LayoutParams.WRAP_CONTENT));
                     textView.setText(tempParm.getLabel());
                     textView.setTextColor(Color.BLACK);
                     textView.setMinLines(2);
                     textView.setGravity(Gravity.CENTER);
-                    textView.setPadding(5,0,0,100);
+                    textView.setPadding(20,0,20,0);
+                    textView.setBackground(shape);
+
 
                     //Add the views to the parents left to right
                     if(layoutValue % 2 == 0){
@@ -137,6 +162,17 @@ public class TabGaugeFragment extends Fragment {
                             ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutLeft.addView(view);
 
+                        // Adds horizontal line below graphs
+                        lineView = new View(this.getContext());
+                        lineView.setVisibility(View.VISIBLE);
+                        lineView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 30));
+                        lineView.setBackgroundColor(Color.parseColor("#fafafa"));
+                        view = lineView;
+
+                        if(view.getParent()!=null)
+                            ((ViewGroup)view.getParent()).removeView(view);
+                        gaugeLayoutLeft.addView(view);
+
                     }
                     else{
 
@@ -148,6 +184,17 @@ public class TabGaugeFragment extends Fragment {
                         view = textView;
 
                         // Adds Text
+                        if(view.getParent()!=null)
+                            ((ViewGroup)view.getParent()).removeView(view);
+                        gaugeLayoutRight.addView(view);
+
+                        // Adds horizontal line below graphs
+                        lineView = new View(this.getContext());
+                        lineView.setVisibility(View.VISIBLE);
+                        lineView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 30));
+                        lineView.setBackgroundColor(Color.parseColor("#fafafa"));
+                        view = lineView;
+
                         if(view.getParent()!=null)
                             ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutRight.addView(view);
@@ -220,28 +267,48 @@ public class TabGaugeFragment extends Fragment {
                 //If there is a min and a max create a gauge view
                 else {
 
+                    // Converting dp to pixels for use with displaying gauges
+                    Resources r = getResources();
+                    float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, r.getDisplayMetrics());
+
+                    // Creating background image
+                    GradientDrawable shapeG = new GradientDrawable();
+                    shapeG.setShape(GradientDrawable.RECTANGLE);
+                    shapeG.setCornerRadii(new float[] {100,100,100,100,0,0,0,0});
+                    shapeG.setColor(Color.parseColor(TabChartFragment.getColorI(i)));
+                    shapeG.setAlpha(50);
+
                     layoutValue ++;
                     String gaugeID = tempParm.getLabel().replaceAll("-%\\s+","").replaceAll("\\W", "");
                     int resID = getResources().getIdentifier(gaugeID, "id", getActivity().getPackageName());
                     Gauge gauge = relativeLayout.findViewById(resID);
                     gauge.setVisibility(Gauge.VISIBLE);
-                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((int) (width / 3), (int) (width / 3));
+                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(((int)((width / 3) - px)), (int) (width / 3));
                     gauge.setLayoutParams(layoutParams);
                     gauge.setValue(0);
                     gauge.invalidate();
+                    gauge.setBackground(shapeG);
                     view = gauge;
 
                     //Set a tag so you know which view is attached to what label
                     view.setTag(tempParm.getLabel());
 
+                    // Creating background image for graphs
+                    GradientDrawable shape = new GradientDrawable();
+                    shape.setShape(GradientDrawable.RECTANGLE);
+                    shape.setCornerRadii(new float[] {0,0,0,0,100,100,100,100});
+                    shape.setColor(Color.parseColor(TabChartFragment.getColorI(i)));
+                    shape.setAlpha(50);
+
                     // Add gauge name under gauge
                     TextView textView = new TextView(this.getContext());
-                    textView.setLayoutParams(new ViewGroup.LayoutParams((int) (width / 3), ViewGroup.LayoutParams.WRAP_CONTENT));
+                    textView.setLayoutParams(new ViewGroup.LayoutParams(((int)((width / 3) - px)), ViewGroup.LayoutParams.WRAP_CONTENT));
                     textView.setText(tempParm.getLabel());
                     textView.setTextColor(Color.BLACK);
                     textView.setMinLines(2);
                     textView.setGravity(Gravity.CENTER);
                     textView.setPadding(5,0,0,100);
+                    textView.setBackground(shape);
 
                     //Add the views to the parents left to right
                     if(layoutValue % 3 == 0){
@@ -254,6 +321,17 @@ public class TabGaugeFragment extends Fragment {
                         view = textView;
 
                         // Adds Text
+                        if(view.getParent()!=null)
+                            ((ViewGroup)view.getParent()).removeView(view);
+                        gaugeLayoutLeft.addView(view);
+
+                        // Adds horizontal line below graphs
+                        lineView = new View(this.getContext());
+                        lineView.setVisibility(View.VISIBLE);
+                        lineView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 30));
+                        lineView.setBackgroundColor(Color.parseColor("#fafafa"));
+                        view = lineView;
+
                         if(view.getParent()!=null)
                             ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutLeft.addView(view);
@@ -272,6 +350,17 @@ public class TabGaugeFragment extends Fragment {
                         if(view.getParent()!=null)
                             ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutMiddle.addView(view);
+
+                        // Adds horizontal line below graphs
+                        lineView = new View(this.getContext());
+                        lineView.setVisibility(View.VISIBLE);
+                        lineView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 30));
+                        lineView.setBackgroundColor(Color.parseColor("#fafafa"));
+                        view = lineView;
+
+                        if(view.getParent()!=null)
+                            ((ViewGroup)view.getParent()).removeView(view);
+                        gaugeLayoutMiddle.addView(view);
                     }
                     else {
 
@@ -283,6 +372,17 @@ public class TabGaugeFragment extends Fragment {
                         view = textView;
 
                         // Adds Text
+                        if(view.getParent()!=null)
+                            ((ViewGroup)view.getParent()).removeView(view);
+                        gaugeLayoutRight.addView(view);
+
+                        // Adds horizontal line below graphs
+                        lineView = new View(this.getContext());
+                        lineView.setVisibility(View.VISIBLE);
+                        lineView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 30));
+                        lineView.setBackgroundColor(Color.parseColor("#fafafa"));
+                        view = lineView;
+
                         if(view.getParent()!=null)
                             ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutRight.addView(view);

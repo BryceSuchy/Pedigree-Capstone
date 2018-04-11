@@ -104,6 +104,7 @@ public class TabChartFragment extends Fragment {
         if (extras != null) {
             selectedParameterListTemp = extras.getParcelableArrayList("selectedParameterList");
 
+            // Removing any parameters that dont have a min and a max, we dont want to display those
             for(int i = 0; i < selectedParameterListTemp.size(); i ++) {
                 DiagnosticParameter tempParm = selectedParameterListTemp.get(i);
                 if (Double.isNaN(tempParm.getMin()) || Double.isNaN(tempParm.getMax())) {
@@ -341,7 +342,7 @@ public class TabChartFragment extends Fragment {
         }
     }
 
-    private String getColorI(int i){
+    public static String getColorI(int i){
         String [] colors = {"red","blue","green","aqua","fuchsia","lime",
                 "maroon","navy","olive","silver","purple","teal"};
 
