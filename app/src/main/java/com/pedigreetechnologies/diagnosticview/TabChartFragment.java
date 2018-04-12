@@ -117,6 +117,8 @@ public class TabChartFragment extends Fragment {
 
         }
 
+
+
         //Build the initial graphs from the selected parameters
         if (selectedParameterList != null) {
             long currentTime = System.currentTimeMillis();
@@ -177,7 +179,7 @@ public class TabChartFragment extends Fragment {
         long adjustedTime = currentTime - referenceTime;
 
         //this is for the csv record. Store the data in a map first then after write to the file. Google supercsv csvMapWriter for more info
-        final Map<String, Object> csvMap = new HashMap<String, Object>();
+
 
 
         //Go through every graph and update the data if it is present

@@ -2,6 +2,7 @@ package com.pedigreetechnologies.diagnosticview;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -69,6 +70,33 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
 
             }
         });
+
+        final NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        menuItem.setChecked(true);
+                        //NavigationView navigationView1 = findViewById(R.id.nav_view);
+                        Menu menu = navigationView.getMenu();
+                        // menu.add(2,i,1,parameter.getLabel()).setActionView(R.layout.switch_item);
+                        //menuItem.getActionView().setActivated(true);
+                        //menu.findItem(R.id.metrics).getActionView().findViewById(R.id.toggle_ab);
+                        //sendMessage(navigationView);
+                        //}
+                        //mDrawerLayout.openDrawer(Gravity);
+                        // close drawer when item is tapped
+                        //mDrawerLayout.closeDrawers();
+
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+                        testCSV();
+
+
+                        return true;
+                    }
+                });
 
     }
 
@@ -146,6 +174,14 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void testCSV(){
+
+        CsvExport test = new CsvExport();
+        test.generateCSV();
+
+    }
+
 
 }
 
