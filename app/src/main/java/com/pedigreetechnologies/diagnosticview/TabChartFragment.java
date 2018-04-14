@@ -57,7 +57,7 @@ public class TabChartFragment extends Fragment {
     //Handler and thread to update the graphs
     private Handler timerHandler;
     // Number of updates per second ex: 1000/4 = approx 4 times a second
-    private int updateTime = 1000 / 2;
+    private int updateTime = 1000 / 15;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -255,6 +255,7 @@ public class TabChartFragment extends Fragment {
             dataSet.setDrawCircles(false);
             dataSet.setLineWidth(3f);//was 1.5
             dataSet.setDrawValues(false);
+            dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);//new
             //dataSet.setColor(Color.parseColor(getColorI(i)));
             dataSet.setColor(Color.BLACK);
             LineData lineData = new LineData(dataSet);
@@ -265,6 +266,7 @@ public class TabChartFragment extends Fragment {
             lineChart.setPinchZoom(false);
             lineChart.setDrawGridBackground(false);
             lineChart.setAutoScaleMinMaxEnabled(false);
+            lineChart.animateX(500);//new
             Description description = lineChart.getDescription();
             description.setEnabled(false);
 
