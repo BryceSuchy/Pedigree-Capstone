@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -25,6 +26,7 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
     ToggleButton toggleAB;
     int pagePosition = 0;
     private PagerAdapter mPagerAdapter;
+    private ArrayList<DiagnosticParameter> paramList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,8 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
             Bundle extras = intent.getExtras();
             if (extras != null) {
                 this.initialisePaging(extras);
+
+                paramList = extras.getParcelableArrayList("selectedParameterList");
             }
         }
 
@@ -92,7 +96,7 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
                         CsvExport test = new CsvExport();
-                        test.generateCSV(getApplicationContext());
+                        test.generateCSV(getApplicationContext(), paramList);
 
 
                         return true;
