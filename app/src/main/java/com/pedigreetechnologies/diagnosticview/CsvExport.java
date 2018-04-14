@@ -5,8 +5,11 @@ import android.content.Context;
 import android.os.Bundle;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -34,7 +37,7 @@ public class CsvExport {
     This method actually generates the CSV file in the directory
     //TODO figure out where exactly the file is being created. data/user/0/com.pedigre.../files ???
      */
-    public void generateCSV(){
+    public void generateCSV(Context context){
 
         System.out.print("----------------------------------------------------------------------METHOD FIRED");
 
@@ -57,23 +60,57 @@ public class CsvExport {
         //return the file
         allGraphDataSingleton = AllGraphDataSingleton.getInstance();
 
-
         //small test--------------------------//
-        ArrayList<SensorDataPoints> testList = new ArrayList<>();
-        testList = allGraphDataSingleton.getGraphData("Oil Temperature");
-        for(int i =0; i< testList.size(); i++){
-            System.out.println(testList.get(i).toString());
+        ArrayList<SensorDataPoints> testList1 = new ArrayList<>();
+        testList1 = allGraphDataSingleton.getGraphData("Oil Temperature");
+        for(int i =0; i< testList1.size(); i++){
+            System.out.println(testList1.get(i).toString());
+        }
+
+        ArrayList<SensorDataPoints> testList2 = new ArrayList<>();
+        testList2 = allGraphDataSingleton.getGraphData("Odometer - High Res (Engine)");
+
+        ArrayList<SensorDataPoints> testList3 = new ArrayList<>();
+        testList3 = allGraphDataSingleton.getGraphData("Total Engine Fuel Used");
+
+        ArrayList<ArrayList<SensorDataPoints>> masterTestList = new ArrayList<>(3);
+        masterTestList.add(testList1);
+        masterTestList.add(testList2);
+        masterTestList.add(testList3);
+
+        FileOutputStream outputStream;
+        try {
+            File file = new File(context.getFilesDir(), "testFileYAAAAAAA.csv");
+            PrintWriter pw = new PrintWriter(file);
+            pw.write("++--------------------Beging File Writing----------------------++");
+            pw.write("\n");
+
+            for(int i = 0; i<masterTestList.size(); i++){
+                ArrayList<SensorDataPoints> loopList = masterTestList.get(i);
+                for(int j = 0; j < loopList.size(); j++){
+                    pw.write(loopList.get(j).toString());
+                    pw.write(",");
+                }
+                pw.write("\n");
+            }
+            pw.write("++----------------------------------End File Writing-----------------------++");
+            pw.close();
+        }
+        catch(FileNotFoundException fnf){
+
         }
         //---------------------------------------//
 
+
+
         //for each item in the parameter list, make a list and add it to the masterList
-        for(int i = 0; i < selectedParameterList.size(); i++){
-
-            //set each item in the master list to be a list of sensorDataPoints taken from getGraphData(); key is the label for the data
-            masterList.set(i, allGraphDataSingleton.getGraphData(selectedParameterList.get(i).getLabel()));
-            System.out.print(masterList.get(i).toString());
-
-        }
+//        for(int i = 0; i < selectedParameterList.size(); i++){
+//
+//            //set each item in the master list to be a list of sensorDataPoints taken from getGraphData(); key is the label for the data
+//            masterList.set(i, allGraphDataSingleton.getGraphData(selectedParameterList.get(i).getLabel()));
+//
+//
+//        }
 //
 //            try {
 //                //open output stream

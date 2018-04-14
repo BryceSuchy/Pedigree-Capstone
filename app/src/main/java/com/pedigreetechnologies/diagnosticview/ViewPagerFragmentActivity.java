@@ -91,7 +91,8 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
 
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
-                        testCSV();
+                        CsvExport test = new CsvExport();
+                        test.generateCSV(getApplicationContext());
 
 
                         return true;
@@ -177,8 +178,6 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
 
     public void testCSV(){
 
-        CsvExport test = new CsvExport();
-        test.generateCSV();
 
     }
 
