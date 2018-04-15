@@ -23,11 +23,10 @@ import java.util.Date;
 
 public class CsvExport {
 
-    //private ArrayList<DiagnosticParameter> selectedParameterList;
-
     //Each item in this arraylist is an arrayList of all the sensor data points for a specific metric. Its the list of all sensorDataPoint lists
     private ArrayList<ArrayList<SensorDataPoints>> masterList;
 
+    //the singleton object where all the data is stored
     private AllGraphDataSingleton allGraphDataSingleton;
 
     private File csvFile;
@@ -40,8 +39,6 @@ public class CsvExport {
     Default: data/user/0/com.pedigreetechnologies.diagnosticview/~~file~~
      */
     public void generateCSV(Context context, ArrayList<DiagnosticParameter> selectedParameters){
-
-        System.out.print("----------------------------------------------------------------------METHOD FIRED");
 
 
         //make file and file stream objects here
@@ -67,13 +64,13 @@ public class CsvExport {
 
             for(int i = 0; i<selectedParameters.size(); i++){
                 ArrayList<SensorDataPoints> loopList = masterList.get(i);
-
                 pw.write(selectedParameters.get(i).getLabel() + " ");
 
                 for(int j = 0; j < loopList.size(); j++){
                     pw.write(loopList.get(j).toString());
                     pw.write(",");
                 }
+
                 pw.write("\n");
 
             }
@@ -81,10 +78,10 @@ public class CsvExport {
             pw.write("++----------------------------------End File Writing-----------------------++");
             pw.close();
         }
-        catch(FileNotFoundException fnf){
+        catch(IOException fnf){
 
         }
-        //---------------------------------------//
+            System.out.print("Error writing to File");
 
         }
 
