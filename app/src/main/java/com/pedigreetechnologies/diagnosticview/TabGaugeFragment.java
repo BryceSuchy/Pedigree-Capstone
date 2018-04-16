@@ -26,8 +26,6 @@ import de.nitri.gauge.Gauge;
 
 public class TabGaugeFragment extends Fragment {
 
-    private ArrayList<DiagnosticParameter> selectedParameterList;
-    private Handler gaugeHandler;
     View view = null;
     View lineView;
     int layoutValue = -1;
