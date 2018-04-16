@@ -2,6 +2,7 @@ package com.pedigreetechnologies.diagnosticview;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -24,6 +26,7 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
     ToggleButton toggleAB;
     int pagePosition = 0;
     private PagerAdapter mPagerAdapter;
+    private ArrayList<DiagnosticParameter> paramList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,8 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
             Bundle extras = intent.getExtras();
             if (extras != null) {
                 this.initialisePaging(extras);
+
+                paramList = extras.getParcelableArrayList("selectedParameterList");
             }
         }
 
@@ -69,6 +74,34 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
 
             }
         });
+
+        final NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        menuItem.setChecked(true);
+                        //NavigationView navigationView1 = findViewById(R.id.nav_view);
+                        Menu menu = navigationView.getMenu();
+                        // menu.add(2,i,1,parameter.getLabel()).setActionView(R.layout.switch_item);
+                        //menuItem.getActionView().setActivated(true);
+                        //menu.findItem(R.id.metrics).getActionView().findViewById(R.id.toggle_ab);
+                        //sendMessage(navigationView);
+                        //}
+                        //mDrawerLayout.openDrawer(Gravity);
+                        // close drawer when item is tapped
+                        //mDrawerLayout.closeDrawers();
+
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+                        CsvExport test = new CsvExport();
+                        test.generateCSV(getApplicationContext(), paramList);
+
+
+                        return true;
+                    }
+                });
 
     }
 
@@ -146,6 +179,12 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void testCSV(){
+
+
+    }
+
 
 }
 

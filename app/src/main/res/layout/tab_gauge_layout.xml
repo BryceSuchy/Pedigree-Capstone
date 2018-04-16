@@ -43,6 +43,7 @@
             <include
                 android:id="@+id/gaugeholder"
                 layout="@layout/gauge_draw" />
+            
 
         </LinearLayout>
 
