@@ -2,6 +2,8 @@ package com.pedigreetechnologies.diagnosticview;
 
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -93,7 +95,8 @@ public class TabChartFragment extends Fragment {
         if (extras != null) {
             selectedParameterListTemp = extras.getParcelableArrayList("selectedParameterList");
 
-            for (int i = 0; i < selectedParameterListTemp.size(); i++) {
+            // Removing any parameters that dont have a min and a max, we dont want to display those
+            for(int i = 0; i < selectedParameterListTemp.size(); i ++) {
                 DiagnosticParameter tempParm = selectedParameterListTemp.get(i);
                 if (Double.isNaN(tempParm.getMin()) || Double.isNaN(tempParm.getMax())) {
                 } else {
@@ -223,9 +226,15 @@ public class TabChartFragment extends Fragment {
             //Setting view width and height, will be need to be used for dynamic graph size
             Resources r = getResources();
             float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 285, r.getDisplayMetrics());
-            lineChart.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) px));
-            lineChart.setBackgroundColor((Color.parseColor(getColorI(i))));
-            lineChart.getBackground().setAlpha(50);
+            lineChart.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int)px));
+
+            // Creating background image for graphs
+            GradientDrawable shape = new GradientDrawable();
+            shape.setShape(GradientDrawable.RECTANGLE);
+            shape.setCornerRadii(new float[] {70,70,70,70,70,70,70,70});
+            shape.setColor(Color.parseColor(getColorI(i)));
+            shape.setAlpha(50);
+            lineChart.setBackground(shape);
 
             //Add graph to parent view (Linear layout)
             lineChartArrayList.add(lineChart);
@@ -235,7 +244,7 @@ public class TabChartFragment extends Fragment {
             lineView = new View(this.getContext());
             lineView.setVisibility(View.VISIBLE);
             lineView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 80));
-            lineView.setBackgroundColor(Color.WHITE);
+            lineView.setBackgroundColor(Color.parseColor("#fafafa"));
             view = lineView;
 
             if (view.getParent() != null)
@@ -325,10 +334,10 @@ public class TabChartFragment extends Fragment {
         }
     }
 
-    private String getColorI(int i) {
-        String[] colors = {"red", "blue", "green", "aqua", "fuchsia", "lime",
-                "maroon", "navy", "olive", "silver", "purple", "teal"};
 
+    public static String getColorI(int i){
+        String [] colors = {"red","blue","green","aqua","fuchsia","lime",
+                "maroon","navy","olive","silver","purple","teal"};
         int n = 12;
         return colors[i % n];
     }
