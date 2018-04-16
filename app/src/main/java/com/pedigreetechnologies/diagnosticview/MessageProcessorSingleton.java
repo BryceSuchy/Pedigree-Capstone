@@ -10,14 +10,14 @@ import java.util.ArrayList;
  * Created by Joe on 4/2/2017.
  */
 
-public class MessageProcessorSingleton extends Thread{
+public class MessageProcessorSingleton extends Thread {
 
+    private static final MessageProcessorSingleton ourInstance = new MessageProcessorSingleton();
     IDataConnection dataConnection;
     ArrayList<DiagnosticParameter> parameterList;
     String TAG = "MessageProcessor";
     boolean hasListShortened = false;
     AllGraphDataSingleton allGraphData;
-
     SensorMessage readMessage;
     String readString = "";
     long readTime = 0;
@@ -28,22 +28,16 @@ public class MessageProcessorSingleton extends Thread{
     DiagnosticParameter tempParameter;
     Handler messageHandler;
 
-    private static final MessageProcessorSingleton ourInstance = new MessageProcessorSingleton();
+    private MessageProcessorSingleton() {
+        allGraphData = AllGraphDataSingleton.getInstance();
+    }
 
     public static MessageProcessorSingleton getInstance() {
         return ourInstance;
     }
 
-    private MessageProcessorSingleton() {
-        allGraphData = AllGraphDataSingleton.getInstance();
-    }
-
     public void setDataConnection(IDataConnection dataConnection) {
         this.dataConnection = dataConnection;
-    }
-
-    public void setParameterList(ArrayList<DiagnosticParameter> parameterList) {
-        this.parameterList = parameterList;
     }
 
     public void setMessageHandler(Handler messageHandler) {
@@ -56,7 +50,7 @@ public class MessageProcessorSingleton extends Thread{
 
         //Try to shorten the fullParameterList first
         do {
-            while(dataConnection == null || parameterList == null){
+            while (dataConnection == null || parameterList == null) {
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
@@ -77,7 +71,7 @@ public class MessageProcessorSingleton extends Thread{
             processMessage(readString, readTime);
             //After shortening the list the handler should be changed so it is null until the new handler is applied
             //messageHandler = null;
-        }while (readString.length() <= 8 && !hasListShortened);
+        } while (readString.length() <= 8 && !hasListShortened);
 
         //Continue to process messages
         while (true) {
@@ -95,13 +89,13 @@ public class MessageProcessorSingleton extends Thread{
             readMessage = dataConnection.readMessage();
             readString = readMessage.getMessage();
             readTime = readMessage.getTimeReceived();
-            processMessage(readString,readTime);
+            processMessage(readString, readTime);
         }
     }
 
-    public void processMessage(String message, long timeReceived){
+    public void processMessage(String message, long timeReceived) {
         //If message is less than 4 bytes, length 8, it is not a complete message
-        if(message.length() <= 8){
+        if (message.length() <= 8) {
             return;
         }
         //first byte of message is the data type
@@ -115,7 +109,7 @@ public class MessageProcessorSingleton extends Thread{
         //Message is the remaining string
         messageData = message.substring(8, message.length());
 
-        if(messageData.contains("3c5343414e3e") || parameterList.size() <= messageDataType){
+        if (messageData.contains("3c5343414e3e") || parameterList.size() <= messageDataType) {
             return;
         }
 
@@ -127,13 +121,13 @@ public class MessageProcessorSingleton extends Thread{
                 //Message is composed of the label,calculatedvalue,timereceived
                 float measurement = tempParameter.calcMeasurement(messageData);
 
-                if(Float.isNaN(measurement)){
+                if (Float.isNaN(measurement)) {
                     continue;
                 }
                 //Log.v(TAG, "Label: " + tempParameter.getLabel() + " Measurement: " + measurement);
                 allGraphData.addGraphEntry(tempParameter.getLabel(), measurement, timeReceived);
 
-                if(messageHandler != null){
+                if (messageHandler != null) {
                     Message handlerMessage = Message.obtain();
                     handlerMessage.obj = tempParameter.getLabel() + "," + measurement + "," + timeReceived;
                     messageHandler.sendMessage(handlerMessage);
@@ -142,13 +136,12 @@ public class MessageProcessorSingleton extends Thread{
         }
     }
 
-    public void shortenParamterList(int dataType){
+    public void shortenParamterList(int dataType) {
         ArrayList<DiagnosticParameter> parameters = new ArrayList<>();
 
         //Get only the values of the most recent data type collected as the sensor will only send one type
-        for(int i = 0; i < parameterList.size(); i++){
-            if(parameterList.get(i).getDataType() == dataType)
-            {
+        for (int i = 0; i < parameterList.size(); i++) {
+            if (parameterList.get(i).getDataType() == dataType) {
                 parameters.add(parameterList.get(i));
             }
         }
@@ -157,11 +150,15 @@ public class MessageProcessorSingleton extends Thread{
         hasListShortened = true;
     }
 
-    public ArrayList<DiagnosticParameter> getParameterList(){
-        if(!hasListShortened){
+    public ArrayList<DiagnosticParameter> getParameterList() {
+        if (!hasListShortened) {
             return null;
         }
 
         return parameterList;
+    }
+
+    public void setParameterList(ArrayList<DiagnosticParameter> parameterList) {
+        this.parameterList = parameterList;
     }
 }

@@ -1,41 +1,29 @@
 package com.pedigreetechnologies.diagnosticview;
 
-import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.MenuAdapter;
-import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.SoundEffectConstants;
-import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
 import java.util.List;
 import java.util.Vector;
 
-import de.nitri.gauge.Gauge;
-
 
 public class ViewPagerFragmentActivity extends AppCompatActivity {
 
-    private PagerAdapter mPagerAdapter;
     ViewPager pager;
     ToggleButton toggleAB;
     int pagePosition = 0;
+    private PagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +52,11 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
 
         // Adding a listener for when the page changes
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            public void onPageScrollStateChanged(int state) {}
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+            public void onPageScrollStateChanged(int state) {
+            }
+
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
 
             // Sets the correct image when the page changes, used in case the page gets changed by gestures
             // TODO Crashes app when rotating the screen in graph view
@@ -90,12 +81,12 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
         fragments.add(Fragment.instantiate(this, TabGaugeFragment.class.getName()));
         fragments.add(Fragment.instantiate(this, TabChartFragment.class.getName()));
 
-        for(int i = 0; i < fragments.size(); i++){
+        for (int i = 0; i < fragments.size(); i++) {
             fragments.get(i).setArguments(extras);
         }
 
-        this.mPagerAdapter  = new PagerAdapter(super.getSupportFragmentManager(), fragments);
-        pager = (ViewPager)super.findViewById(R.id.viewpager);
+        this.mPagerAdapter = new PagerAdapter(super.getSupportFragmentManager(), fragments);
+        pager = (ViewPager) super.findViewById(R.id.viewpager);
         pager.setAdapter(this.mPagerAdapter);
 
 
@@ -118,8 +109,7 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main, menu);
         // Switch button that changes between gauge and graph view
         toggleAB = menu.findItem(R.id.mytoggle).getActionView().findViewById(R.id.toggle_ab);
-        toggleAB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-        {
+        toggleAB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
@@ -128,15 +118,13 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
                     // Switches to graph view
                     // pagePosition is redundant but is used for pageListener
                     pagePosition = 1;
-                    pager.setCurrentItem(pagePosition,true);
+                    pager.setCurrentItem(pagePosition, true);
 
-                }
-                else
-                {
+                } else {
                     // Switches to gauge view
                     // pagePosition is redundant but is used for pageListener
                     pagePosition = 0;
-                    pager.setCurrentItem(pagePosition,true);
+                    pager.setCurrentItem(pagePosition, true);
                 }
             }
         });

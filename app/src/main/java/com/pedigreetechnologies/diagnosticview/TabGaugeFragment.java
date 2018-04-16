@@ -19,7 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import java.util.ArrayList;
+
 import de.nitri.gauge.Gauge;
 
 public class TabGaugeFragment extends Fragment {
@@ -29,7 +31,8 @@ public class TabGaugeFragment extends Fragment {
     View view = null;
     View lineView;
     int layoutValue = -1;
-
+    private ArrayList<DiagnosticParameter> selectedParameterList;
+    private Handler gaugeHandler;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (container == null) {
@@ -41,7 +44,7 @@ public class TabGaugeFragment extends Fragment {
 
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
 
-            scrollView = (ScrollView)inflater.inflate(R.layout.tab_gauge_layout, container, false);
+            scrollView = (ScrollView) inflater.inflate(R.layout.tab_gauge_layout, container, false);
             RelativeLayout relativeLayout = scrollView.getRootView().findViewById(R.id.gaugeholder);
 
             //Create two layouts both taking up half the screen to have 2 views next to each other
@@ -62,14 +65,14 @@ public class TabGaugeFragment extends Fragment {
             int width = displayMetrics.widthPixels;
 
             // Adds Gauges above all TextViews
-            for(int i = 0; i < selectedParameterList.size(); i ++){
+            for (int i = 0; i < selectedParameterList.size(); i++) {
                 DiagnosticParameter tempParm = selectedParameterList.get(i);
 
                 //If there is not a min and a max create a text view
-                if(Double.isNaN(tempParm.getMin())|| Double.isNaN(tempParm.getMax())){
+                if (Double.isNaN(tempParm.getMin()) || Double.isNaN(tempParm.getMax())) {
 
                     // Adds horizontal line above text metrics
-                    RelativeLayout relLine = (RelativeLayout)inflater.inflate(R.layout.gauge_draw, container, false);
+                    RelativeLayout relLine = (RelativeLayout) inflater.inflate(R.layout.gauge_draw, container, false);
                     lineView = relLine.findViewById(R.id.line1);
                     lineView.setVisibility(View.VISIBLE);
                     RelativeLayout.LayoutParams layoutParamsLine = new RelativeLayout.LayoutParams((int) (width), 2);
@@ -77,8 +80,8 @@ public class TabGaugeFragment extends Fragment {
                     lineView.invalidate();
                     view = lineView;
 
-                    if(view.getParent()!=null)
-                        ((ViewGroup)view.getParent()).removeView(view);
+                    if (view.getParent() != null)
+                        ((ViewGroup) view.getParent()).removeView(view);
                     textMetricLayout.addView(view);
 
                     TextView textView = new TextView(this.getContext());
@@ -87,15 +90,15 @@ public class TabGaugeFragment extends Fragment {
                     textView.setTextColor(Color.BLACK);
                     textView.setMinLines(1);
                     textView.setGravity(Gravity.LEFT);
-                    textView.setPadding(50,20,0,20);
+                    textView.setPadding(50, 20, 0, 20);
                     view = textView;
 
                     //Set a tag so you know which view is attached to what label
                     view.setTag(tempParm.getLabel());
 
                     //Add the views to the textMetricLayout
-                    if(view.getParent()!=null)
-                    ((ViewGroup)view.getParent()).removeView(view);
+                    if (view.getParent() != null)
+                        ((ViewGroup) view.getParent()).removeView(view);
                     textMetricLayout.addView(view);
                 }
 
@@ -115,6 +118,7 @@ public class TabGaugeFragment extends Fragment {
 
                     layoutValue ++;
                     String gaugeID = tempParm.getLabel().replaceAll("-%\\s+","").replaceAll("\\W", "");
+
                     int resID = getResources().getIdentifier(gaugeID, "id", getActivity().getPackageName());
                     Gauge gauge = relativeLayout.findViewById(resID);
                     gauge.setVisibility(Gauge.VISIBLE);
@@ -147,11 +151,11 @@ public class TabGaugeFragment extends Fragment {
 
 
                     //Add the views to the parents left to right
-                    if(layoutValue % 2 == 0){
+                    if (layoutValue % 2 == 0) {
 
                         // Adds gauge
-                        if(view.getParent()!=null)
-                            ((ViewGroup)view.getParent()).removeView(view);
+                        if (view.getParent() != null)
+                            ((ViewGroup) view.getParent()).removeView(view);
                         gaugeLayoutLeft.addView(view);
 
 
@@ -173,12 +177,11 @@ public class TabGaugeFragment extends Fragment {
                             ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutLeft.addView(view);
 
-                    }
-                    else{
+                    } else {
 
                         // Adds gauge
-                        if(view.getParent()!=null)
-                            ((ViewGroup)view.getParent()).removeView(view);
+                        if (view.getParent() != null)
+                            ((ViewGroup) view.getParent()).removeView(view);
                         gaugeLayoutRight.addView(view);
 
                         view = textView;
@@ -205,7 +208,7 @@ public class TabGaugeFragment extends Fragment {
         } else {
 
 
-            scrollView = (ScrollView)inflater.inflate(R.layout.tab_gauge_layout_landscape, container, false);
+            scrollView = (ScrollView) inflater.inflate(R.layout.tab_gauge_layout_landscape, container, false);
             RelativeLayout relativeLayout = scrollView.getRootView().findViewById(R.id.gaugeholder);
 
             //Create two layouts both taking up half the screen to have 2 views next to each other
@@ -227,14 +230,14 @@ public class TabGaugeFragment extends Fragment {
             int width = displayMetrics.widthPixels;
 
             // Adds Gauges above all TextViews
-            for(int i = 0; i < selectedParameterList.size(); i ++){
+            for (int i = 0; i < selectedParameterList.size(); i++) {
                 DiagnosticParameter tempParm = selectedParameterList.get(i);
 
                 //If there is not a min and a max create a text view
-                if(Double.isNaN(tempParm.getMin())|| Double.isNaN(tempParm.getMax())){
+                if (Double.isNaN(tempParm.getMin()) || Double.isNaN(tempParm.getMax())) {
 
                     // Adds horizontal line above text metrics
-                    RelativeLayout relLine = (RelativeLayout)inflater.inflate(R.layout.gauge_draw, container, false);
+                    RelativeLayout relLine = (RelativeLayout) inflater.inflate(R.layout.gauge_draw, container, false);
                     lineView = relLine.findViewById(R.id.line1);
                     lineView.setVisibility(View.VISIBLE);
                     RelativeLayout.LayoutParams layoutParamsLine = new RelativeLayout.LayoutParams((int) (width), 2);
@@ -242,8 +245,8 @@ public class TabGaugeFragment extends Fragment {
                     lineView.invalidate();
                     view = lineView;
 
-                    if(view.getParent()!=null)
-                        ((ViewGroup)view.getParent()).removeView(view);
+                    if (view.getParent() != null)
+                        ((ViewGroup) view.getParent()).removeView(view);
                     textMetricLayout.addView(view);
 
                     TextView textView = new TextView(this.getContext());
@@ -252,15 +255,15 @@ public class TabGaugeFragment extends Fragment {
                     textView.setTextColor(Color.BLACK);
                     textView.setMinLines(1);
                     textView.setGravity(Gravity.LEFT);
-                    textView.setPadding(50,20,0,20);
+                    textView.setPadding(50, 20, 0, 20);
                     view = textView;
 
                     //Set a tag so you know which view is attached to what label
                     view.setTag(tempParm.getLabel());
 
                     //Add the views to the textMetricLayout
-                    if(view.getParent()!=null)
-                        ((ViewGroup)view.getParent()).removeView(view);
+                    if (view.getParent() != null)
+                        ((ViewGroup) view.getParent()).removeView(view);
                     textMetricLayout.addView(view);
                 }
 
@@ -311,11 +314,11 @@ public class TabGaugeFragment extends Fragment {
                     textView.setBackground(shape);
 
                     //Add the views to the parents left to right
-                    if(layoutValue % 3 == 0){
+                    if (layoutValue % 3 == 0) {
 
                         // Adds gauge
-                        if(view.getParent()!=null)
-                            ((ViewGroup)view.getParent()).removeView(view);
+                        if (view.getParent() != null)
+                            ((ViewGroup) view.getParent()).removeView(view);
                         gaugeLayoutLeft.addView(view);
 
                         view = textView;
@@ -336,12 +339,11 @@ public class TabGaugeFragment extends Fragment {
                             ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutLeft.addView(view);
 
-                    }
-                    else if (layoutValue % 3 == 1){
+                    } else if (layoutValue % 3 == 1) {
 
                         // Adds gauge
-                        if(view.getParent()!=null)
-                            ((ViewGroup)view.getParent()).removeView(view);
+                        if (view.getParent() != null)
+                            ((ViewGroup) view.getParent()).removeView(view);
                         gaugeLayoutMiddle.addView(view);
 
                         view = textView;
@@ -361,12 +363,12 @@ public class TabGaugeFragment extends Fragment {
                         if(view.getParent()!=null)
                             ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutMiddle.addView(view);
-                    }
-                    else {
+                      
+                    } else {
 
                         // Adds gauge
-                        if(view.getParent()!=null)
-                            ((ViewGroup)view.getParent()).removeView(view);
+                        if (view.getParent() != null)
+                            ((ViewGroup) view.getParent()).removeView(view);
                         gaugeLayoutRight.addView(view);
 
                         view = textView;
@@ -404,18 +406,17 @@ public class TabGaugeFragment extends Fragment {
 
                 View view = scrollView.findViewWithTag(label);
 
-                if(view instanceof TextView){
+                if (view instanceof TextView) {
                     DiagnosticParameter tempParm;
-                    for(int i = 0; i < selectedParameterList.size(); i++){
+                    for (int i = 0; i < selectedParameterList.size(); i++) {
                         tempParm = selectedParameterList.get(i);
-                        if(tempParm.getLabel().equals(label)) {
-                            ((TextView)view).setText(value + " " + tempParm.getUnits() + "\n" + label);
+                        if (tempParm.getLabel().equals(label)) {
+                            ((TextView) view).setText(value + " " + tempParm.getUnits() + "\n" + label);
                         }
                     }
-                }
-                else if(view instanceof Gauge){
-                    ((Gauge)view).setLowerText(value);
-                    ((Gauge)view).moveToValue(Float.parseFloat(value));
+                } else if (view instanceof Gauge) {
+                    ((Gauge) view).setLowerText(value);
+                    ((Gauge) view).moveToValue(Float.parseFloat(value));
                 }
             }
         };

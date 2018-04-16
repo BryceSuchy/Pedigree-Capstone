@@ -5,12 +5,12 @@ package com.pedigreetechnologies.diagnosticview;
  * Message stored directly from the sensor
  */
 
-public class SensorMessage{
+public class SensorMessage {
 
     private String message;
     private long timeReceived;
 
-    public SensorMessage(String message, long timeReceived){
+    public SensorMessage(String message, long timeReceived) {
         this.message = message;
         this.timeReceived = timeReceived;
     }

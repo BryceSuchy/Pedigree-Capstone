@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  * Created by Joe on 2/23/2017.
  */
 
-public class TestDataConnection extends Thread implements IDataConnection{
+public class TestDataConnection extends Thread implements IDataConnection {
 
     LinkedBlockingQueue<SensorMessage> messageQueue;
     String TAG = "TestDataConnection";
