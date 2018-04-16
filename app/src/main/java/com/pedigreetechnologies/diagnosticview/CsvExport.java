@@ -43,7 +43,7 @@ public class CsvExport {
 
         //make file and file stream objects here
         //TODO this name should be programatically made somehow. User created or maybe a date UID format
-        fileName = "TestFileTester.csv";
+        fileName = "TestFile.csv";
 
         allGraphDataSingleton = AllGraphDataSingleton.getInstance();
         masterList = new ArrayList<>(50);
@@ -57,7 +57,7 @@ public class CsvExport {
 
         FileOutputStream outputStream;
         try {
-            File file = new File(context.getFilesDir(), "testFileYAAAAAAA.csv");
+            File file = new File(context.getFilesDir(), "TestFile.csv");
             PrintWriter pw = new PrintWriter(file);
             pw.write("++--------------------[Data Value]{Time Value}----------------------++");
             pw.write("\n");
