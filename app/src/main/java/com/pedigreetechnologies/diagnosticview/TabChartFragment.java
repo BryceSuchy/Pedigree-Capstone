@@ -228,20 +228,12 @@ public class TabChartFragment extends Fragment {
             float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 285, r.getDisplayMetrics());
             lineChart.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int)px));
 
-            // Creating background image for graphs
-            GradientDrawable shape = new GradientDrawable();
-            shape.setShape(GradientDrawable.RECTANGLE);
-            shape.setCornerRadii(new float[] {70,70,70,70,70,70,70,70});
-            shape.setColor(Color.parseColor(getColorI(i)));
-            shape.setAlpha(50);
-            lineChart.setBackground(shape);
-
             //Add graph to parent view (Linear layout)
             lineChartArrayList.add(lineChart);
             graphLinearLayout.addView(lineChart);
 
             // Adds horizontal line below graphs
-            lineView = new View(this.getContext());
+            /*lineView = new View(this.getContext());
             lineView.setVisibility(View.VISIBLE);
             lineView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 80));
             lineView.setBackgroundColor(Color.parseColor("#fafafa"));
@@ -249,7 +241,7 @@ public class TabChartFragment extends Fragment {
 
             if (view.getParent() != null)
                 ((ViewGroup) view.getParent()).removeView(view);
-            graphLinearLayout.addView(view);
+            graphLinearLayout.addView(view);*/
 
 
             //Get the variables for creating the graph
@@ -265,8 +257,8 @@ public class TabChartFragment extends Fragment {
             dataSet.setLineWidth(3f);//was 1.5
             dataSet.setDrawValues(false);
             dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);//new
-            //dataSet.setColor(Color.parseColor(getColorI(i)));
-            dataSet.setColor(Color.BLACK);
+            dataSet.setColor(Color.parseColor(getColorI(i)));
+            //dataSet.setColor(Color.BLACK);
             LineData lineData = new LineData(dataSet);
 
             //Change graph parameters
