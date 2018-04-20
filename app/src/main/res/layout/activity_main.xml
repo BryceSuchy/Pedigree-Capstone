@@ -31,8 +31,7 @@
             android:layout_alignStart="@+id/d_select_text"
             android:layout_below="@+id/d_select_text"
             android:layout_marginLeft="0dp"
-            android:layout_marginRight="50dp"
-            android:visibility="invisible"></ListView>
+            android:layout_marginRight="50dp"></ListView>
 
     </android.support.design.widget.NavigationView>
 

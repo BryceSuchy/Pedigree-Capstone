@@ -14,7 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import java.util.ArrayList;
+
 import de.nitri.gauge.Gauge;
 
 public class TabGaugeFragment extends Fragment {
@@ -52,7 +54,7 @@ public class TabGaugeFragment extends Fragment {
 
         // Adds Gauges above all TextViews
         if(selectedParameterList == null){
-            System.out.print("selectedParameterList is empty");
+
         } else {
             for (int i = 0; i < selectedParameterList.size(); i++) {
                 DiagnosticParameter tempParm = selectedParameterList.get(i);

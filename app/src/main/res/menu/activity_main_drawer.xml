@@ -29,7 +29,7 @@
         <item
             android:id="@+id/upload_csv"
             android:icon="@drawable/ic_file_upload_black_24px"
-            android:title="Upload CSV" />
+            android:title="Download CSV" />
     </group>
 
     <group android:id="@+id/metrics">

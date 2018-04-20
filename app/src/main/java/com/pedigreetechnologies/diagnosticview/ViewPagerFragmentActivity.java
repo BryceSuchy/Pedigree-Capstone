@@ -111,19 +111,44 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(ViewPagerFragmentActivity.this,
                 android.R.layout.simple_list_item_activated_1, optionsArray);
 
+
         final NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         // set item as selected to persist highlight
-                        menuItem.setChecked(true);
+
                         //NavigationView navigationView1 = findViewById(R.id.nav_view);
                         Menu menu = navigationView.getMenu();
-                        // menu.add(2,i,1,parameter.getLabel()).setActionView(R.layout.switch_item);
-                        menuItem.getActionView().setActivated(true);
-                        //menu.findItem(R.id.metrics).getActionView().findViewById(R.id.toggle_ab);
-                        //sendMessage(navigationView);
+
+                        menuItem.setChecked(true);
+
+
+                        if (navigationView.getMenu().getItem(6).isChecked()) {
+                            navigationView.getMenu().getItem(6).setChecked(false);
+                        } else {
+                            navigationView.getMenu().getItem(6).setChecked(true);
+                        }
+
+                        //listView.setItemChecked(2, true);
+                        //listView.setSelection(2);
+
+
+                        //Get the Fragment activity and pass the list of parameters
+//                        Intent intent = new Intent(ViewPagerFragmentActivity.this.getApplicationContext(), ViewPagerFragmentActivity.class);
+//                        intent.putParcelableArrayListExtra("fullParameterList", parameterList);
+//                        intent.putExtra("selectedParameterList", navigationView.getMenu().getItem(6).getTitle());
+//                        System.out.println(navigationView.getMenu().getItem(6).getTitle());
+
+
+                        //intent.putParcelableArrayListExtra("selectedParameterList", navigationView.getMenu().getItem(6).getTitle());
+                        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        //startActivity(intent);
+
+                        // navigationView.getMenu().getItem(6).getActionView().findViewById(R.layout.switch_item));
+//                        menu.findItem(R.id.metrics).getActionView().findViewById(R.id.toggle_ab);
+//                        sendMessage(navigationView);
                         //}
                         //mDrawerLayout.openDrawer(Gravity);
                         // close drawer when item is tapped

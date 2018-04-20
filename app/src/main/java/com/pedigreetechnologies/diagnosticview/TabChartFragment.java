@@ -151,7 +151,7 @@ public class TabChartFragment extends Fragment {
 
         //Go through every graph and update the data if it is present
         if (selectedParameterList == null) {
-            System.out.println("selectedParameterList is empty");
+
         } else {
             for (int i = 0; i < selectedParameterList.size(); i++) {
                 //Get current graph label
