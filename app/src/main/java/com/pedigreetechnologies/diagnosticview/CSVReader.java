@@ -9,20 +9,18 @@ import java.util.ArrayList;
  * Created by Joe on 2/16/2017.
  */
 
-public class CSVReader
-{
-    public static ArrayList<String[]> readIgnoreHeader(InputStreamReader inputStreamReader){
+public class CSVReader {
+    public static ArrayList<String[]> readIgnoreHeader(InputStreamReader inputStreamReader) {
         ArrayList<String[]> list = new ArrayList();
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-        try{
+        try {
             String line;
             bufferedReader.readLine();
-            while((line = bufferedReader.readLine()) != null){
+            while ((line = bufferedReader.readLine()) != null) {
                 String[] splitLine = line.split(",");
                 list.add(splitLine);
             }
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -35,17 +33,16 @@ public class CSVReader
         return list;
     }
 
-    public static ArrayList<String[]> read(InputStreamReader inputStreamReader){
+    public static ArrayList<String[]> read(InputStreamReader inputStreamReader) {
         ArrayList<String[]> list = new ArrayList();
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-        try{
+        try {
             String line;
-            while((line = bufferedReader.readLine()) != null){
+            while ((line = bufferedReader.readLine()) != null) {
                 String[] splitLine = line.split(",");
                 list.add(splitLine);
             }
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

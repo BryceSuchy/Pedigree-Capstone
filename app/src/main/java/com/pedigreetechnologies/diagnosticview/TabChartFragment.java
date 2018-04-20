@@ -2,6 +2,8 @@ package com.pedigreetechnologies.diagnosticview;
 
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -25,16 +27,38 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+
+import org.supercsv.cellprocessor.Optional;
+import org.supercsv.cellprocessor.ift.CellProcessor;
+import org.supercsv.io.CsvMapWriter;
+import org.supercsv.io.ICsvMapReader;
+import org.supercsv.io.ICsvMapWriter;
+import org.supercsv.prefs.CsvPreference;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TabChartFragment extends Fragment {
 
+    //new padding var
+    public int paddingLength = 7;
+    View lineView;
+    View view = null;
+    //Max graph scale in # of milliseconds 5 minutes * 60 seconds * 1000 to m/s
+    long graphMax = 1 * 30 * 1000;
+    //Issue with graph crashing when there is no data in the set, this is removed after the graph has more data
+    Entry emptyEntryPlaceholder = (new Entry(0, 0));
+    ScrollView scrollView;
     //Singleton containing all graph data
     private AllGraphDataSingleton allGraphDataSingleton;
     //Parameters to be displayed, selected in previous activity
-    private ArrayList<DiagnosticParameter> selectedParameterList;
+    private ArrayList<DiagnosticParameter> selectedParameterList = new ArrayList(50);
+    private ArrayList<DiagnosticParameter> selectedParameterListTemp;
     //Contains the location of the graphs stored in lineChartArrayList by name
     private HashMap<String, Integer> graphIndexMap;
     //Data entries for the graphs
@@ -44,21 +68,12 @@ public class TabChartFragment extends Fragment {
     //Parent layout that contains the graphs
     private LinearLayout graphLinearLayout;
     private long referenceTime;
-
     //Handler and thread to update the graphs
     private Handler timerHandler;
-
-    //Max graph scale in # of milliseconds 5 minutes * 60 seconds * 1000 to m/s
-    long graphMax = 1 * 30 * 1000;
-
     // Number of updates per second ex: 1000/4 = approx 4 times a second
-    private int updateTime = 1000 / 2;
+    private int updateTime = 1000 / 15;
 
-    //Issue with graph crashing when there is no data in the set, this is removed after the graph has more data
-    Entry emptyEntryPlaceholder = (new Entry(0, 0));
 
-    //new padding var
-    public int paddingLength = 7;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,7 +88,7 @@ public class TabChartFragment extends Fragment {
             return null;
         }
 
-        ScrollView scrollView = (ScrollView) inflater.inflate(R.layout.tab_chart_layout, container, false);
+        scrollView = (ScrollView) inflater.inflate(R.layout.tab_chart_layout, container, false);
 
         allGraphDataSingleton = AllGraphDataSingleton.getInstance();
         dataEntries = new ArrayList<>();
@@ -92,8 +107,20 @@ public class TabChartFragment extends Fragment {
         //Get the parameters from the parent activity
         Bundle extras = getArguments();
         if (extras != null) {
-            selectedParameterList = extras.getParcelableArrayList("selectedParameterList");
+            selectedParameterListTemp = extras.getParcelableArrayList("selectedParameterList");
+
+            // Removing any parameters that dont have a min and a max, we dont want to display those
+            for(int i = 0; i < selectedParameterListTemp.size(); i ++) {
+                DiagnosticParameter tempParm = selectedParameterListTemp.get(i);
+                if (Double.isNaN(tempParm.getMin()) || Double.isNaN(tempParm.getMax())) {
+                } else {
+                    selectedParameterList.add(selectedParameterListTemp.get(i));
+                }
+            }
+
         }
+
+
 
         //Build the initial graphs from the selected parameters
         if (selectedParameterList != null) {
@@ -131,7 +158,12 @@ public class TabChartFragment extends Fragment {
                 Log.v("ToStrings", selectedParameterList.get(i).toString());
             }
             createGraphs(currentTime);
+
+
+
         }
+
+
 
         return scrollView;
     }
@@ -149,61 +181,66 @@ public class TabChartFragment extends Fragment {
 
         long adjustedTime = currentTime - referenceTime;
 
+        //this is for the csv record. Store the data in a map first then after write to the file. Google supercsv csvMapWriter for more info
+
+
+
         //Go through every graph and update the data if it is present
-        if (selectedParameterList == null) {
+        for (int i = 0; i < selectedParameterList.size(); i++) {
+            //Get current graph label
+            dataLabel = selectedParameterList.get(i).getLabel();
+            //
+            latestValues = allGraphDataSingleton.getDataForUpdatePeriod(dataLabel, currentTime);
 
-        } else {
-            for (int i = 0; i < selectedParameterList.size(); i++) {
-                //Get current graph label
-                dataLabel = selectedParameterList.get(i).getLabel();
-                //
-                latestValues = allGraphDataSingleton.getDataForUpdatePeriod(dataLabel, currentTime);
+            //Get the index of the current graph in the parent view
+            graphIndex = graphIndexMap.get(dataLabel);
+            //Get the graph to update
+            chart = lineChartArrayList.get(graphIndex);
 
-                //Get the index of the current graph in the parent view
-                graphIndex = graphIndexMap.get(dataLabel);
-                //Get the graph to update
-                chart = lineChartArrayList.get(graphIndex);
+            //Get the data to update
+            lineData = chart.getLineData();
+            set = lineData.getDataSetByIndex(0);
 
-                //Get the data to update
-                lineData = chart.getLineData();
-                set = lineData.getDataSetByIndex(0);
+            numberOfNewValues = latestValues.length;
 
-                numberOfNewValues = latestValues.length;
+            if (numberOfNewValues > 0) {
+                //Remove the placeholder if it is present
+                set.removeEntry(emptyEntryPlaceholder);
 
-                if (numberOfNewValues > 0) {
-                    //Remove the placeholder if it is present
-                    set.removeEntry(emptyEntryPlaceholder);
-
-                    //Add all of the new values to the dataset
-                    for (int j = 0; j < numberOfNewValues; j++) {
-                        dataPoint = latestValues[j];
-                        set.addEntry(new Entry(dataPoint.getTime(), dataPoint.getDataPoint()));
-                    }
+                //Add all of the new values to the dataset
+                for (int j = 0; j < numberOfNewValues; j++) {
+                    dataPoint = latestValues[j];
+                    set.addEntry(new Entry(dataPoint.getTime(), dataPoint.getDataPoint()));
                 }
-
-                //Update axis to move the graphs in realtime even if there are no new data points
-                XAxis xAxis = chart.getXAxis();
-                xAxis.setAxisMaximum(adjustedTime);
-                xAxis.setAxisMinimum(adjustedTime - graphMax);
-
-                YAxis leftYAxis = chart.getAxisLeft();
-
-                float maxY = allGraphDataSingleton.getMaxYValue(dataLabel, currentTime, graphMax);
-                //new
-                maxY = formulateMaxY(maxY);
-
-                if (!Float.isNaN(maxY) && selectedParameterList.get(i).getMin() != Double.NaN) {
-                    leftYAxis.setAxisMaximum(maxY);
-                }
-
-                //Tell the graph and datasets that they are updated
-                lineData.notifyDataChanged();
-                chart.notifyDataSetChanged();
-
-                //Refresh graph data
-                chart.invalidate();
             }
+
+            //Update axis to move the graphs in realtime even if there are no new data points
+            XAxis xAxis = chart.getXAxis();
+            xAxis.setAxisMaximum(adjustedTime);
+            xAxis.setAxisMinimum(adjustedTime - graphMax);
+
+            YAxis leftYAxis = chart.getAxisLeft();
+
+            float maxY = allGraphDataSingleton.getMaxYValue(dataLabel, currentTime, graphMax);
+            //new
+            maxY = formulateMaxY(maxY);
+
+            if (!Float.isNaN(maxY) && selectedParameterList.get(i).getMin() != Double.NaN) {
+                leftYAxis.setAxisMaximum(maxY);
+            }
+
+            //Tell the graph and datasets that they are updated
+            lineData.notifyDataChanged();
+            chart.notifyDataSetChanged();
+
+
+
+
+            //Refresh graph data
+            chart.invalidate();
         }
+
+
     }
 
     private void createGraphs(long currentTime) {
@@ -219,11 +256,31 @@ public class TabChartFragment extends Fragment {
             //Setting view width and height, will be need to be used for dynamic graph size
             Resources r = getResources();
             float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 285, r.getDisplayMetrics());
-            lineChart.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) px));
+            lineChart.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int)px));
+
+            // Creating background image for graphs
+            GradientDrawable shape = new GradientDrawable();
+            shape.setShape(GradientDrawable.RECTANGLE);
+            shape.setCornerRadii(new float[] {70,70,70,70,70,70,70,70});
+            shape.setColor(Color.parseColor(getColorI(i)));
+            shape.setAlpha(50);
+            lineChart.setBackground(shape);
 
             //Add graph to parent view (Linear layout)
             lineChartArrayList.add(lineChart);
             graphLinearLayout.addView(lineChart);
+
+            // Adds horizontal line below graphs
+            lineView = new View(this.getContext());
+            lineView.setVisibility(View.VISIBLE);
+            lineView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 80));
+            lineView.setBackgroundColor(Color.parseColor("#fafafa"));
+            view = lineView;
+
+            if (view.getParent() != null)
+                ((ViewGroup) view.getParent()).removeView(view);
+            graphLinearLayout.addView(view);
+
 
             //Get the variables for creating the graph
             DiagnosticParameter parameter = selectedParameterList.get(i);
@@ -237,7 +294,9 @@ public class TabChartFragment extends Fragment {
             dataSet.setDrawCircles(false);
             dataSet.setLineWidth(3f);//was 1.5
             dataSet.setDrawValues(false);
-            dataSet.setColor(Color.parseColor(getColorI(i)));
+            dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);//new
+            //dataSet.setColor(Color.parseColor(getColorI(i)));
+            dataSet.setColor(Color.BLACK);
             LineData lineData = new LineData(dataSet);
 
             //Change graph parameters
@@ -246,6 +305,7 @@ public class TabChartFragment extends Fragment {
             lineChart.setPinchZoom(false);
             lineChart.setDrawGridBackground(false);
             lineChart.setAutoScaleMinMaxEnabled(false);
+            lineChart.animateX(500);//new
             Description description = lineChart.getDescription();
             description.setEnabled(false);
 
@@ -304,10 +364,10 @@ public class TabChartFragment extends Fragment {
         }
     }
 
-    private String getColorI(int i) {
-        String[] colors = {"red", "blue", "green", "aqua", "fuchsia", "lime",
-                "maroon", "navy", "olive", "silver", "purple", "teal"};
 
+    public static String getColorI(int i){
+        String [] colors = {"red","blue","green","aqua","fuchsia","lime",
+                "maroon","navy","olive","silver","purple","teal"};
         int n = 12;
         return colors[i % n];
     }

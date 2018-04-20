@@ -54,7 +54,7 @@ public class DiagnosticParameter implements Comparable<DiagnosticParameter>, Par
         this.label = label;
     }
 
-    public DiagnosticParameter(Parcel parcel){
+    public DiagnosticParameter(Parcel parcel) {
         this.dataType = parcel.readInt();
         this.parameterID = parcel.readInt();
         this.sourceAddress = parcel.readInt();
@@ -73,10 +73,9 @@ public class DiagnosticParameter implements Comparable<DiagnosticParameter>, Par
     }
 
     public static DiagnosticParameter createObject(String[] csvSplitString) throws CSVParseError {
-        if(csvSplitString.length < 15){
+        if (csvSplitString.length < 15) {
             throw new CSVParseError("The Number of parameters read from the CSV file are less than the required information");
-        }
-        else if(csvSplitString.length > 15){
+        } else if (csvSplitString.length > 15) {
             throw new CSVParseError("The Number of parameters read from the CSV file are more than the required information");
         }
         int dataType = Integer.parseInt(csvSplitString[0]);
@@ -93,18 +92,16 @@ public class DiagnosticParameter implements Comparable<DiagnosticParameter>, Par
         double offset = Double.parseDouble(csvSplitString[9]);
 
         double min;
-        if(csvSplitString[10].isEmpty()){
+        if (csvSplitString[10].isEmpty()) {
             min = Float.NaN;
-        }
-        else {
+        } else {
             min = Double.parseDouble(csvSplitString[10]);
         }
 
         double max;
-        if(csvSplitString[11].isEmpty()){
+        if (csvSplitString[11].isEmpty()) {
             max = Float.NaN;
-        }
-        else {
+        } else {
             max = Double.parseDouble(csvSplitString[11]);
         }
 
@@ -176,25 +173,22 @@ public class DiagnosticParameter implements Comparable<DiagnosticParameter>, Par
 
     @Override
     public int compareTo(DiagnosticParameter diagnosticParameter) {
-        if(dataType - diagnosticParameter.getDataType() <= 0){
-            if(parameterID - diagnosticParameter.getParameterID() < 0){
+        if (dataType - diagnosticParameter.getDataType() <= 0) {
+            if (parameterID - diagnosticParameter.getParameterID() < 0) {
                 return -1;
-            }
-            else if(parameterID - diagnosticParameter.getParameterID() == 0){
+            } else if (parameterID - diagnosticParameter.getParameterID() == 0) {
                 return 0;
-            }
-            else{
+            } else {
                 return 1;
             }
-        }
-        else{
+        } else {
             return 1;
         }
     }
 
-    public float calcMeasurement(String message){
+    public float calcMeasurement(String message) {
 
-        try{
+        try {
             //Creates the shortened message that applies to the parameter
             int startIndex = 2 * startByte;
             int endIndex = startIndex + bitLength / 4;
@@ -217,13 +211,12 @@ public class DiagnosticParameter implements Comparable<DiagnosticParameter>, Par
             }
 
             //if the message an value are the same return NAN to signify it is erroneous could be changed to an exception
-            if(messageValue == errorValue){
+            if (messageValue == errorValue) {
                 return Float.NaN;
             }
-            float messageCalculatedValue = (float)(((messageValue * resolution) + offset));
+            float messageCalculatedValue = (float) (((messageValue * resolution) + offset));
             return messageCalculatedValue;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return Float.NaN;
         }
@@ -252,11 +245,11 @@ public class DiagnosticParameter implements Comparable<DiagnosticParameter>, Par
 
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof DiagnosticParameter)){
+        if (!(obj instanceof DiagnosticParameter)) {
             return false;
         }
 
-        DiagnosticParameter parameter = (DiagnosticParameter)obj;
+        DiagnosticParameter parameter = (DiagnosticParameter) obj;
 
         return this.dataType == parameter.dataType && this.parameterID == parameter.parameterID
                 && this.sourceAddress == parameter.sourceAddress

@@ -59,7 +59,7 @@ public class DiagnosticList extends AppCompatActivity {
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
         //When an item is selected it will display the chosen items at the bottom of the screen
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //String selectedItem = (String)(parent.getItemAtPosition(position));
@@ -68,8 +68,8 @@ public class DiagnosticList extends AppCompatActivity {
                 SparseBooleanArray checked = listView.getCheckedItemPositions();
 
                 ArrayList<String> selectedArray = new ArrayList<>();
-                for(int i = 0; i < listView.getAdapter().getCount(); i++){
-                    if(checked.get(i)){
+                for (int i = 0; i < listView.getAdapter().getCount(); i++) {
+                    if (checked.get(i)) {
                         selectedArray.add(parameterList.get(i).getLabel());
                     }
                 }
@@ -103,18 +103,18 @@ public class DiagnosticList extends AppCompatActivity {
 
         Collections.sort(Arrays.asList(parameters), new DiagnosticParameterComparator());
 
-        for(int i = 0; i < parameters.length; i++){
+        for (int i = 0; i < parameters.length; i++) {
             sortedArray.add(parameters[i]);
         }
         return sortedArray;
     }
 
     //Gets list of chosen items and moves to the next activity
-    public void sendMessage(View view){
+    public void sendMessage(View view) {
         SparseBooleanArray checked = listView.getCheckedItemPositions();
         ArrayList<DiagnosticParameter> selectedParameterList = new ArrayList<>();
-        for(int i = 0; i < listView.getAdapter().getCount(); i++){
-            if(checked.get(i)){
+        for (int i = 0; i < listView.getAdapter().getCount(); i++) {
+            if (checked.get(i)) {
                 selectedParameterList.add(parameterList.get(i));
             }
         }
@@ -138,9 +138,51 @@ public class DiagnosticList extends AppCompatActivity {
         super.onDestroy();
     }
 
+    public void startBluetoothConnection(String connectionAddress) throws IOException {
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            Log.v("Main", "Bluetooth no supported on this device");
+        }
+
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(turnOn, 0);
+        }
+
+        mmDevice = mBluetoothAdapter.getRemoteDevice(connectionAddress);
+        socket = mmDevice.createRfcommSocketToServiceRecord(MY_UUID);
+        socket.connect();
+
+        btThread = new BluetoothConnection(socket);
+        btThread.start();
+
+        messageProcessor = MessageProcessorSingleton.getInstance();
+        messageProcessor.setDataConnection(btThread);
+        messageProcessor.setParameterList(parameterList);
+        messageProcessor.start();
+    }
+
+    public void startTestDataConnection() {
+        connection = new TestDataConnection(this);
+        connection.setMessageDelay(50);
+
+        messageProcessor = MessageProcessorSingleton.getInstance();
+        messageProcessor.setDataConnection(connection);
+        messageProcessor.setParameterList(parameterList);
+
+        if (!connection.isAlive()) {
+            connection.start();
+        }
+
+        if (!messageProcessor.isAlive()) {
+            messageProcessor.start();
+        }
+    }
+
     class Load extends AsyncTask<String, String, String> {
 
         ProgressDialog progDailog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -183,7 +225,7 @@ public class DiagnosticList extends AppCompatActivity {
             }
 
             //Wait until the list of metrics has been shorted to only reflect the correct data type
-            while(!messageProcessor.hasListShortened) {
+            while (!messageProcessor.hasListShortened) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -201,53 +243,12 @@ public class DiagnosticList extends AppCompatActivity {
             super.onPostExecute(unused);
 
             //Populate list of available parameters supported by the sensor
-            for(DiagnosticParameter parameter : parameterList){
+            for (DiagnosticParameter parameter : parameterList) {
                 optionsArray.add(parameter.getLabel());
             }
 
             adapter.notifyDataSetChanged();
             progDailog.dismiss();
-        }
-    }
-
-    public void startBluetoothConnection(String connectionAddress) throws IOException {
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter == null) {
-            Log.v("Main", "Bluetooth no supported on this device");
-        }
-
-        if (!mBluetoothAdapter.isEnabled()) {
-            Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(turnOn, 0);
-        }
-
-        mmDevice = mBluetoothAdapter.getRemoteDevice(connectionAddress);
-        socket = mmDevice.createRfcommSocketToServiceRecord(MY_UUID);
-        socket.connect();
-
-        btThread = new BluetoothConnection(socket);
-        btThread.start();
-
-        messageProcessor = MessageProcessorSingleton.getInstance();
-        messageProcessor.setDataConnection(btThread);
-        messageProcessor.setParameterList(parameterList);
-        messageProcessor.start();
-    }
-
-    public void startTestDataConnection() {
-        connection = new TestDataConnection(this);
-        connection.setMessageDelay(50);
-
-        messageProcessor = MessageProcessorSingleton.getInstance();
-        messageProcessor.setDataConnection(connection);
-        messageProcessor.setParameterList(parameterList);
-
-        if(!connection.isAlive()){
-            connection.start();
-        }
-
-        if(!messageProcessor.isAlive()){
-            messageProcessor.start();
         }
     }
 }

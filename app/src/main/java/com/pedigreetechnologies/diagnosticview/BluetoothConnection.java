@@ -10,14 +10,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class BluetoothConnection extends Thread implements IDataConnection{
+public class BluetoothConnection extends Thread implements IDataConnection {
     private final BluetoothSocket mmSocket;
     private final InputStream mmInStream;
     private final OutputStream mmOutStream;
+    LinkedBlockingQueue<SensorMessage> messageQueue;
     private byte[] mmBuffer; // mmBuffer store for the stream
     private Thread heartBeatThread;
     private String TAG = "BluetoothConnection";
-    LinkedBlockingQueue<SensorMessage> messageQueue;
 
     public BluetoothConnection(BluetoothSocket socket) {
         mmSocket = socket;
@@ -88,15 +88,14 @@ public class BluetoothConnection extends Thread implements IDataConnection{
 
                 readStr += str;
 
-                while(repeat){
+                while (repeat) {
                     //Append new message an check if there is a completed message in the buffer
                     matcher = pattern.matcher(readStr);
-                    if(matcher.find()){
+                    if (matcher.find()) {
                         messageQueue.put(new SensorMessage(matcher.group(2), System.currentTimeMillis()));
                         int cutlen = readStr.indexOf(matcher.group(0)) + matcher.group(0).length();
                         readStr = readStr.substring(cutlen);
-                    }
-                    else{
+                    } else {
                         repeat = false;
                     }
                 }
@@ -126,7 +125,7 @@ public class BluetoothConnection extends Thread implements IDataConnection{
     // Call this method from the main activity to shut down the connection.
     public void cancel() {
         try {
-            if(mmSocket != null && mmOutStream != null){
+            if (mmSocket != null && mmOutStream != null) {
                 write("<SCAN>O</SCAN>".getBytes());
                 mmSocket.close();
             }

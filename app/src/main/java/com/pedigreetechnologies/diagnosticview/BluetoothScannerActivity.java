@@ -30,6 +30,25 @@ public class BluetoothScannerActivity extends AppCompatActivity {
     private ArrayList<SBluetoothDevice> deviceList = new ArrayList();
     private BluetoothAdapter bluetoothAdapter;
     private DeviceAdapter deviceAdapter;
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                String deviceName = device.getName();
+                String deviceHardwareAddress = device.getAddress(); // MAC address
+
+                SBluetoothDevice discoveredDevice = new SBluetoothDevice(deviceName, deviceHardwareAddress);
+
+                //Check if its is an LMU device and it isn't already in the list
+                if (deviceName != null && deviceName.contains("LMU") && !deviceList.contains(discoveredDevice)) {
+                    deviceList.add(discoveredDevice);
+                    deviceAdapter.notifyDataSetChanged();
+                }
+            }
+        }
+    };
     private boolean isReceiverRegistered = false;
     private Toolbar toolbar;
 
@@ -37,8 +56,8 @@ public class BluetoothScannerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_scanner);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
         //Adding test bluetooth device to access the test data
         deviceList.add(new SBluetoothDevice("Test Device", "00:00:00:00:00:00"));
@@ -107,26 +126,6 @@ public class BluetoothScannerActivity extends AppCompatActivity {
         Log.v("scanneract", "OnDestroy");
         super.onDestroy();
     }
-
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                String deviceName = device.getName();
-                String deviceHardwareAddress = device.getAddress(); // MAC address
-
-                SBluetoothDevice discoveredDevice = new SBluetoothDevice(deviceName, deviceHardwareAddress);
-
-                //Check if its is an LMU device and it isn't already in the list
-                if (deviceName != null && deviceName.contains("LMU") && !deviceList.contains(discoveredDevice)) {
-                    deviceList.add(discoveredDevice);
-                    deviceAdapter.notifyDataSetChanged();
-                }
-            }
-        }
-    };
 
     private class SBluetoothDevice {
         private String deviceName;

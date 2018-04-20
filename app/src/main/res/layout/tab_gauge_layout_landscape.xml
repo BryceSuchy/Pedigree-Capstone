@@ -40,10 +40,22 @@
                 android:paddingBottom="5dp">
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/gaugeLayout3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+            </LinearLayout>
+
             <include
                 android:id="@+id/gaugeholder"
                 layout="@layout/gauge_draw" />
-            
 
         </LinearLayout>
 
