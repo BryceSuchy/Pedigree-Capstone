@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/presets">
         <item
             android:id="@+id/add_preset"
             android:icon="@drawable/ic_add_box_black_24px"
@@ -27,8 +29,8 @@
             android:icon="@drawable/ic_delete_black_24px"
             android:title="Delete Preset" />
         <item
-            android:id="@+id/upload_csv"
-            android:icon="@drawable/ic_file_upload_black_24px"
+            android:id="@+id/download_csv"
+            android:icon="@drawable/ic_file_download_black_24px"
             android:title="Download CSV" />
     </group>
 

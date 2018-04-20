@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ListView;
@@ -111,7 +113,6 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(ViewPagerFragmentActivity.this,
                 android.R.layout.simple_list_item_activated_1, optionsArray);
 
-
         final NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -124,6 +125,21 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
 
                         menuItem.setChecked(true);
 
+                        switch (menuItem.getItemId()) {
+                            case R.id.add_preset:
+                                //newGame();
+                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+                                menu.add(R.id.presets, 1, 2, "New Preset");
+                                return true;
+                            case R.id.delete_preset:
+                                menu.removeItem(1);
+                                return true;
+                            case R.id.download_csv:
+                                //showHelp();
+                                return true;
+                        }
 
                         if (navigationView.getMenu().getItem(6).isChecked()) {
                             navigationView.getMenu().getItem(6).setChecked(false);
@@ -148,7 +164,7 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
 
                         // navigationView.getMenu().getItem(6).getActionView().findViewById(R.layout.switch_item));
 //                        menu.findItem(R.id.metrics).getActionView().findViewById(R.id.toggle_ab);
-//                        sendMessage(navigationView);
+                        //sendMessage(navigationView);
                         //}
                         //mDrawerLayout.openDrawer(Gravity);
                         // close drawer when item is tapped
