@@ -22,7 +22,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/SpeedCruiseControl"
@@ -41,7 +41,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/SpeedInstrumentCluster"
@@ -60,7 +60,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/SpeedBrakesSystemControllerAxleBased"
@@ -79,7 +79,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/EngineRPM"
@@ -98,7 +98,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/CoolantTemperature"
@@ -117,7 +117,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/OilTemperature"
@@ -136,7 +136,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/OilPressure"
@@ -155,7 +155,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/CoolantLevel"
@@ -174,7 +174,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/FuelLevel"
@@ -193,7 +193,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/FuelLevelBodyController"
@@ -212,7 +212,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/DieselLevel"
@@ -231,7 +231,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/SpeedCruiseControlj1708"
@@ -250,7 +250,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/SpeedEnginej1708"
@@ -269,7 +269,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/SpeedBrakesPowerUnitj1708"
@@ -288,7 +288,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/SpeedVehicleManagementSystemj1708"
@@ -307,7 +307,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/CoolantTemperaturej1708"
@@ -326,7 +326,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/OilTemperaturej1708"
@@ -345,7 +345,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/OilPressurej1708"
@@ -364,7 +364,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/CoolantLevelj1708"
@@ -383,7 +383,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/FuelLevelj1708"
@@ -402,7 +402,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/EngineRPMj1708"
@@ -421,7 +421,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <de.nitri.gauge.Gauge
         android:id="@+id/FuelRate"
@@ -440,7 +440,7 @@
         gauge:lowerText="0"
         gauge:scaleColor="@color/gaugeScale"
         gauge:needleShadow="false"
-        gauge:faceColor="@color/gaugeBackground"/>
+        gauge:faceColor="@color/gaugeBackground" />
 
     <View
         android:layout_width="match_parent"

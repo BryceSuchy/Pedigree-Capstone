@@ -40,34 +40,28 @@ import java.util.Vector;
 public class ViewPagerFragmentActivity extends AppCompatActivity {
 
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-
-    private BluetoothAdapter mBluetoothAdapter;
-    private BluetoothDevice mmDevice;
-    private BluetoothSocket socket;
-
-    private TestDataConnection connection;
-    private BluetoothConnection btThread;
-    private MessageProcessorSingleton messageProcessor;
-
-    private ArrayList<DiagnosticParameter> parameterList;
-    private ArrayList<String> optionsArray = new ArrayList<>();
-
-    private ListView listView;
-    private ArrayAdapter<String> adapter;
-
-    private String macAddress = null;
-
-    private String TAG = "DiagnosticList";
-
-    private DrawerLayout mDrawerLayout;
-
-    private PagerAdapter mPagerAdapter;
     ViewPager pager;
     ToggleButton toggleAB;
     int pagePosition = 0;
+    private BluetoothAdapter mBluetoothAdapter;
+    private BluetoothDevice mmDevice;
+    private BluetoothSocket socket;
+    private TestDataConnection connection;
+    private BluetoothConnection btThread;
+    private MessageProcessorSingleton messageProcessor;
+    private ArrayList<DiagnosticParameter> parameterList;
+    private ArrayList<String> optionsArray = new ArrayList<>();
+    private ListView listView;
+    private ArrayAdapter<String> adapter;
+    private String macAddress = null;
+    private String TAG = "DiagnosticList";
+    private DrawerLayout mDrawerLayout;
+    private PagerAdapter mPagerAdapter;
+    private ArrayList<DiagnosticParameter> paramList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        invalidateOptionsMenu();
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_main);
 
@@ -87,6 +81,8 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
             Bundle extras = intent.getExtras();
             if (extras != null) {
                 this.initialisePaging(extras);
+
+                paramList = extras.getParcelableArrayList("selectedParameterList");
             }
         }
 
@@ -104,7 +100,7 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
                 toggleAB = findViewById(R.id.toggle_ab);
                 if (pagePosition == 1)
                     toggleAB.setChecked(true);
-                else
+                else if (pagePosition == 0)
                     toggleAB.setChecked(false);
             }
         });
@@ -112,6 +108,9 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
 
         adapter = new ArrayAdapter<>(ViewPagerFragmentActivity.this,
                 android.R.layout.simple_list_item_activated_1, optionsArray);
+        listView = (ListView) findViewById(R.id.list);
+        listView.setAdapter(adapter);
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
         final NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
@@ -133,11 +132,22 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
 
                                 menu.add(R.id.presets, 1, 2, "New Preset");
                                 return true;
+                            case R.id.select_all:
+                                for (int i = 0; i < listView.getCount(); i++)
+                                    listView.setItemChecked(i, true);
+                                sendMessage(navigationView);
+                                return true;
+                            case R.id.select_none:
+                                for (int i = 0; i < listView.getAdapter().getCount(); i++)
+                                    listView.setItemChecked(i, false);
+                                sendMessage(navigationView);
+                                return true;
                             case R.id.delete_preset:
                                 menu.removeItem(1);
                                 return true;
                             case R.id.download_csv:
-                                //showHelp();
+                                CsvExport test = new CsvExport();
+                                test.generateCSV(getApplicationContext(), paramList);
                                 return true;
                         }
 
@@ -147,9 +157,9 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
                             navigationView.getMenu().getItem(6).setChecked(true);
                         }
 
-                        //listView.setItemChecked(2, true);
-                        //listView.setSelection(2);
-
+                        listView.setItemChecked(1, true);
+                        listView.setItemChecked(2, true);
+                        listView.setItemChecked(3, true);
 
                         //Get the Fragment activity and pass the list of parameters
 //                        Intent intent = new Intent(ViewPagerFragmentActivity.this.getApplicationContext(), ViewPagerFragmentActivity.class);
@@ -164,7 +174,7 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
 
                         // navigationView.getMenu().getItem(6).getActionView().findViewById(R.layout.switch_item));
 //                        menu.findItem(R.id.metrics).getActionView().findViewById(R.id.toggle_ab);
-                        //sendMessage(navigationView);
+                        sendMessage(navigationView);
                         //}
                         //mDrawerLayout.openDrawer(Gravity);
                         // close drawer when item is tapped
@@ -236,85 +246,6 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
     protected void onDestroy() {
         Log.v(TAG, "OnDestroy");
         super.onDestroy();
-    }
-
-    class Load extends AsyncTask<String, String, String> {
-
-        ProgressDialog progDailog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progDailog = new ProgressDialog(ViewPagerFragmentActivity.this);
-            progDailog.setMessage("Connecting to device and loading statistics");
-            progDailog.setIndeterminate(false);
-            progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progDailog.setCancelable(false);
-            progDailog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... aurl) {
-
-            parameterList = buildConfigurationParameterList();
-
-            if (parameterList == null) {
-                //Display error about bad config file
-            }
-
-            //Get mac address from previous activity
-            Intent intent = getIntent();
-            if (intent != null) {
-                Bundle extras = intent.getExtras();
-                if (extras != null) {
-                    macAddress = extras.getString("macAddress");
-                }
-            }
-
-            //If there is no mac address use test data, else use it for the bluetooth connection
-            if (macAddress == null || macAddress.equals("00:00:00:00:00:00")) {
-                startTestDataConnection();
-            } else {
-                try {
-                    startBluetoothConnection(macAddress);
-                } catch (IOException e) {
-                    //Send user to previous screen with error
-                    e.printStackTrace();
-                }
-            }
-
-            //Wait until the list of metrics has been shorted to only reflect the correct data type
-            while (!messageProcessor.hasListShortened) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            parameterList = messageProcessor.getParameterList();
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String unused) {
-            super.onPostExecute(unused);
-
-            NavigationView navigationView1 = findViewById(R.id.nav_view);
-            Menu menu = navigationView1.getMenu();
-            int i = 0;
-            //Populate list of available parameters supported by the sensor
-            for (DiagnosticParameter parameter : parameterList) {
-                optionsArray.add(parameter.getLabel());
-                i += 1;
-
-                menu.add(R.id.metrics, i, Menu.NONE, parameter.getLabel()).setActionView(R.layout.switch_item);
-            }
-
-            adapter.notifyDataSetChanged();
-            progDailog.dismiss();
-        }
     }
 
     public void startBluetoothConnection(String connectionAddress) throws IOException {
@@ -425,6 +356,85 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    class Load extends AsyncTask<String, String, String> {
+
+        ProgressDialog progDailog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progDailog = new ProgressDialog(ViewPagerFragmentActivity.this);
+            progDailog.setMessage("Connecting to device and loading statistics");
+            progDailog.setIndeterminate(false);
+            progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progDailog.setCancelable(false);
+            progDailog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... aurl) {
+
+            parameterList = buildConfigurationParameterList();
+
+            if (parameterList == null) {
+                //Display error about bad config file
+            }
+
+            //Get mac address from previous activity
+            Intent intent = getIntent();
+            if (intent != null) {
+                Bundle extras = intent.getExtras();
+                if (extras != null) {
+                    macAddress = extras.getString("macAddress");
+                }
+            }
+
+            //If there is no mac address use test data, else use it for the bluetooth connection
+            if (macAddress == null || macAddress.equals("00:00:00:00:00:00")) {
+                startTestDataConnection();
+            } else {
+                try {
+                    startBluetoothConnection(macAddress);
+                } catch (IOException e) {
+                    //Send user to previous screen with error
+                    e.printStackTrace();
+                }
+            }
+
+            //Wait until the list of metrics has been shorted to only reflect the correct data type
+            while (!messageProcessor.hasListShortened) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            parameterList = messageProcessor.getParameterList();
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String unused) {
+            super.onPostExecute(unused);
+
+            NavigationView navigationView1 = findViewById(R.id.nav_view);
+            Menu menu = navigationView1.getMenu();
+            int i = 0;
+            //Populate list of available parameters supported by the sensor
+            for (DiagnosticParameter parameter : parameterList) {
+                optionsArray.add(parameter.getLabel());
+                i += 1;
+
+                menu.add(R.id.metrics, i, Menu.NONE, parameter.getLabel()).setActionView(R.layout.switch_item);
+            }
+
+            adapter.notifyDataSetChanged();
+            progDailog.dismiss();
+        }
     }
 
 }

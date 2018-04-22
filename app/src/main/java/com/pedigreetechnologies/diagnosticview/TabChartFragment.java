@@ -2,7 +2,6 @@ package com.pedigreetechnologies.diagnosticview;
 
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,21 +26,9 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
-
-import org.supercsv.cellprocessor.Optional;
-import org.supercsv.cellprocessor.ift.CellProcessor;
-import org.supercsv.io.CsvMapWriter;
-import org.supercsv.io.ICsvMapReader;
-import org.supercsv.io.ICsvMapWriter;
-import org.supercsv.prefs.CsvPreference;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TabChartFragment extends Fragment {
 
@@ -110,11 +97,15 @@ public class TabChartFragment extends Fragment {
             selectedParameterListTemp = extras.getParcelableArrayList("selectedParameterList");
 
             // Removing any parameters that dont have a min and a max, we dont want to display those
-            for(int i = 0; i < selectedParameterListTemp.size(); i ++) {
-                DiagnosticParameter tempParm = selectedParameterListTemp.get(i);
-                if (Double.isNaN(tempParm.getMin()) || Double.isNaN(tempParm.getMax())) {
-                } else {
-                    selectedParameterList.add(selectedParameterListTemp.get(i));
+            if (selectedParameterListTemp == null) {
+
+            } else {
+                for (int i = 0; i < selectedParameterListTemp.size(); i++) {
+                    DiagnosticParameter tempParm = selectedParameterListTemp.get(i);
+                    if (Double.isNaN(tempParm.getMin()) || Double.isNaN(tempParm.getMax())) {
+                    } else {
+                        selectedParameterList.add(selectedParameterListTemp.get(i));
+                    }
                 }
             }
 
@@ -160,11 +151,7 @@ public class TabChartFragment extends Fragment {
             createGraphs(currentTime);
 
 
-
         }
-
-
-
         return scrollView;
     }
 
@@ -186,58 +173,60 @@ public class TabChartFragment extends Fragment {
 
 
         //Go through every graph and update the data if it is present
-        for (int i = 0; i < selectedParameterList.size(); i++) {
-            //Get current graph label
-            dataLabel = selectedParameterList.get(i).getLabel();
-            //
-            latestValues = allGraphDataSingleton.getDataForUpdatePeriod(dataLabel, currentTime);
+        if (selectedParameterList == null) {
 
-            //Get the index of the current graph in the parent view
-            graphIndex = graphIndexMap.get(dataLabel);
-            //Get the graph to update
-            chart = lineChartArrayList.get(graphIndex);
+        } else {
+            for (int i = 0; i < selectedParameterList.size(); i++) {
+                //Get current graph label
+                dataLabel = selectedParameterList.get(i).getLabel();
+                //
+                latestValues = allGraphDataSingleton.getDataForUpdatePeriod(dataLabel, currentTime);
 
-            //Get the data to update
-            lineData = chart.getLineData();
-            set = lineData.getDataSetByIndex(0);
+                //Get the index of the current graph in the parent view
+                graphIndex = graphIndexMap.get(dataLabel);
+                //Get the graph to update
+                chart = lineChartArrayList.get(graphIndex);
 
-            numberOfNewValues = latestValues.length;
+                //Get the data to update
+                lineData = chart.getLineData();
+                set = lineData.getDataSetByIndex(0);
 
-            if (numberOfNewValues > 0) {
-                //Remove the placeholder if it is present
-                set.removeEntry(emptyEntryPlaceholder);
+                numberOfNewValues = latestValues.length;
 
-                //Add all of the new values to the dataset
-                for (int j = 0; j < numberOfNewValues; j++) {
-                    dataPoint = latestValues[j];
-                    set.addEntry(new Entry(dataPoint.getTime(), dataPoint.getDataPoint()));
+                if (numberOfNewValues > 0) {
+                    //Remove the placeholder if it is present
+                    set.removeEntry(emptyEntryPlaceholder);
+
+                    //Add all of the new values to the dataset
+                    for (int j = 0; j < numberOfNewValues; j++) {
+                        dataPoint = latestValues[j];
+                        set.addEntry(new Entry(dataPoint.getTime(), dataPoint.getDataPoint()));
+                    }
                 }
+
+                //Update axis to move the graphs in realtime even if there are no new data points
+                XAxis xAxis = chart.getXAxis();
+                xAxis.setAxisMaximum(adjustedTime);
+                xAxis.setAxisMinimum(adjustedTime - graphMax);
+
+                YAxis leftYAxis = chart.getAxisLeft();
+
+                float maxY = allGraphDataSingleton.getMaxYValue(dataLabel, currentTime, graphMax);
+                //new
+                maxY = formulateMaxY(maxY);
+
+                if (!Float.isNaN(maxY) && selectedParameterList.get(i).getMin() != Double.NaN) {
+                    leftYAxis.setAxisMaximum(maxY);
+                }
+
+                //Tell the graph and datasets that they are updated
+                lineData.notifyDataChanged();
+                chart.notifyDataSetChanged();
+
+
+                //Refresh graph data
+                chart.invalidate();
             }
-
-            //Update axis to move the graphs in realtime even if there are no new data points
-            XAxis xAxis = chart.getXAxis();
-            xAxis.setAxisMaximum(adjustedTime);
-            xAxis.setAxisMinimum(adjustedTime - graphMax);
-
-            YAxis leftYAxis = chart.getAxisLeft();
-
-            float maxY = allGraphDataSingleton.getMaxYValue(dataLabel, currentTime, graphMax);
-            //new
-            maxY = formulateMaxY(maxY);
-
-            if (!Float.isNaN(maxY) && selectedParameterList.get(i).getMin() != Double.NaN) {
-                leftYAxis.setAxisMaximum(maxY);
-            }
-
-            //Tell the graph and datasets that they are updated
-            lineData.notifyDataChanged();
-            chart.notifyDataSetChanged();
-
-
-
-
-            //Refresh graph data
-            chart.invalidate();
         }
 
 
@@ -256,12 +245,12 @@ public class TabChartFragment extends Fragment {
             //Setting view width and height, will be need to be used for dynamic graph size
             Resources r = getResources();
             float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 285, r.getDisplayMetrics());
-            lineChart.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int)px));
+            lineChart.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) px));
 
             // Creating background image for graphs
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
-            shape.setCornerRadii(new float[] {70,70,70,70,70,70,70,70});
+            shape.setCornerRadii(new float[]{70, 70, 70, 70, 70, 70, 70, 70});
             shape.setColor(Color.parseColor(getColorI(i)));
             shape.setAlpha(50);
             lineChart.setBackground(shape);
@@ -365,9 +354,9 @@ public class TabChartFragment extends Fragment {
     }
 
 
-    public static String getColorI(int i){
-        String [] colors = {"red","blue","green","aqua","fuchsia","lime",
-                "maroon","navy","olive","silver","purple","teal"};
+    public static String getColorI(int i) {
+        String[] colors = {"red", "blue", "green", "aqua", "fuchsia", "lime",
+                "maroon", "navy", "olive", "silver", "purple", "teal"};
         int n = 12;
         return colors[i % n];
     }

@@ -13,15 +13,15 @@
             android:title="Add Preset" />
         <group>
             <item
-                android:id="@+id/radio1"
+                android:id="@+id/select_all"
                 android:checkable="true"
                 android:inputType="phone"
-                android:title="Preset 1"
+                android:title="Select All"
                 app:actionViewClass="android.widget.RadioButton" />
             <item
-                android:id="@+id/radio2"
+                android:id="@+id/select_none"
                 android:checkable="true"
-                android:title="Preset 2"
+                android:title="None"
                 app:actionViewClass="android.widget.RadioButton" />
         </group>
         <item

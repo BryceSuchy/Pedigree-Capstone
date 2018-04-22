@@ -24,8 +24,7 @@
                 android:paddingRight="5dp"
                 android:paddingLeft="5dp"
                 android:paddingTop="5dp"
-                android:paddingBottom="5dp">
-            </LinearLayout>
+                android:paddingBottom="5dp"></LinearLayout>
 
             <LinearLayout
                 android:id="@+id/gaugeLayout2"
@@ -37,8 +36,7 @@
                 android:paddingRight="5dp"
                 android:paddingLeft="5dp"
                 android:paddingTop="5dp"
-                android:paddingBottom="5dp">
-            </LinearLayout>
+                android:paddingBottom="5dp"></LinearLayout>
 
             <LinearLayout
                 android:id="@+id/gaugeLayout3"
@@ -50,8 +48,7 @@
                 android:paddingRight="5dp"
                 android:paddingLeft="5dp"
                 android:paddingTop="5dp"
-                android:paddingBottom="5dp">
-            </LinearLayout>
+                android:paddingBottom="5dp"></LinearLayout>
 
             <include
                 android:id="@+id/gaugeholder"
