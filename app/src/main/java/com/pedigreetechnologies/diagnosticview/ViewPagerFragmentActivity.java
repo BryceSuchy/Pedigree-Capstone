@@ -68,9 +68,13 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
             public void onPageSelected(int pagePosition) {
                 // Check if this is the page you want.
                 if (pagePosition == 1)
-                    toggleAB.setChecked(true);
+                    try {
+                        toggleAB.setChecked(true);
+                    } catch(Exception eo){}
                 else if (pagePosition == 0)
-                    toggleAB.setChecked(false);
+                    try {
+                        toggleAB.setChecked(false);
+                    } catch(Exception eo){}
 
             }
         });
@@ -147,7 +151,6 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if (isChecked) {
-
                     // Switches to graph view
                     // pagePosition is redundant but is used for pageListener
                     pagePosition = 1;
@@ -161,6 +164,14 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // Sets proper image for toggleAB on rotation when creating menu
+        if (pager.getCurrentItem() == 1){
+            toggleAB.setChecked(true);
+        }
+        else if (pager.getCurrentItem() == 0){
+            toggleAB.setChecked(false);
+        }
 
         return true;
     }

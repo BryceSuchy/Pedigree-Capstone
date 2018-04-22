@@ -111,7 +111,7 @@ public class TabGaugeFragment extends Fragment {
                     GradientDrawable shapeG = new GradientDrawable();
                     shapeG.setShape(GradientDrawable.RECTANGLE);
                     shapeG.setCornerRadii(new float[] {100,100,100,100,0,0,0,0});
-                    shapeG.setColor(Color.parseColor(TabChartFragment.getColorI(i)));
+                    shapeG.setColor(Color.parseColor("#3A3A3A"));
                     shapeG.setAlpha(50);
 
                     layoutValue ++;
@@ -134,7 +134,7 @@ public class TabGaugeFragment extends Fragment {
                     GradientDrawable shape = new GradientDrawable();
                     shape.setShape(GradientDrawable.RECTANGLE);
                     shape.setCornerRadii(new float[] {0,0,0,0,100,100,100,100});
-                    shape.setColor(Color.parseColor(TabChartFragment.getColorI(i)));
+                    shape.setColor(Color.parseColor("#3A3A3A"));
                     shape.setAlpha(50);
 
                     // Add gauge name under gauge
@@ -276,7 +276,7 @@ public class TabGaugeFragment extends Fragment {
                     GradientDrawable shapeG = new GradientDrawable();
                     shapeG.setShape(GradientDrawable.RECTANGLE);
                     shapeG.setCornerRadii(new float[] {100,100,100,100,0,0,0,0});
-                    shapeG.setColor(Color.parseColor(TabChartFragment.getColorI(i)));
+                    shapeG.setColor(Color.parseColor("#3A3A3A"));
                     shapeG.setAlpha(50);
 
                     layoutValue ++;
@@ -298,7 +298,7 @@ public class TabGaugeFragment extends Fragment {
                     GradientDrawable shape = new GradientDrawable();
                     shape.setShape(GradientDrawable.RECTANGLE);
                     shape.setCornerRadii(new float[] {0,0,0,0,100,100,100,100});
-                    shape.setColor(Color.parseColor(TabChartFragment.getColorI(i)));
+                    shape.setColor(Color.parseColor("#3A3A3A"));
                     shape.setAlpha(50);
 
                     // Add gauge name under gauge
