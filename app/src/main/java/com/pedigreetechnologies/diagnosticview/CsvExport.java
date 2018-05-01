@@ -3,6 +3,7 @@ package com.pedigreetechnologies.diagnosticview;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,6 +13,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -43,7 +45,15 @@ public class CsvExport {
 
         //make file and file stream objects here
         //TODO this name should be programatically made somehow. User created or maybe a date UID format
-        fileName = "TestFile.csv";
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int date = calendar.get(Calendar.DATE);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        int second = calendar.get(Calendar.SECOND);
+        fileName = year + "_" + month + "_" + date + "_" + hour + "_" + minute + "_" + second + "_" + ".csv";
 
         allGraphDataSingleton = AllGraphDataSingleton.getInstance();
         masterList = new ArrayList<>(50);
@@ -57,12 +67,15 @@ public class CsvExport {
 
         FileOutputStream outputStream;
         try {
-            File file = new File(context.getFilesDir(), "TestFile.csv");
+            File file = new File(context.getFilesDir(), fileName);
             PrintWriter pw = new PrintWriter(file);
             pw.write("++--------------------[Data Value]{Time Value}----------------------++");
             pw.write("\n");
 
             for(int i = 0; i<selectedParameters.size(); i++){
+                System.out.println();
+                System.out.println("MMMMMMMMMMMMAAAAAAAAAAADDDDDDDDDDDDDEEEEEEEEEE-------------------------------------------------------------------------------------------------------");
+                System.out.println();
                 ArrayList<SensorDataPoints> loopList = masterList.get(i);
                 pw.write(selectedParameters.get(i).getLabel() + " ");
 
@@ -79,9 +92,15 @@ public class CsvExport {
             pw.close();
         }
         catch(IOException fnf){
-
-        }
             System.out.print("Error writing to File");
+        }
+
+            CharSequence messageText = "Exporting CSV file!";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, messageText, duration);
+            toast.show();
+
+
 
         }
 
