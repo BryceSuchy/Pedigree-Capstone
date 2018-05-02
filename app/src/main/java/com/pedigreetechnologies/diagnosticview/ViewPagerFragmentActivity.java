@@ -55,9 +55,9 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     private String macAddress = null;
     private String TAG = "DiagnosticList";
-    private DrawerLayout mDrawerLayout;
     private PagerAdapter mPagerAdapter;
     private ArrayList<DiagnosticParameter> paramList;
+    final List<MenuItem> items=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,14 +94,21 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
 
-            // Sets the correct image when the page changes, used incase the page gets changed by gestures
+            // Sets the correct image when the page changes, used in case the page gets changed by gestures
+            // TODO Crashes app when rotating the screen in graph view
             public void onPageSelected(int pagePosition) {
                 // Check if this is the page you want.
-                toggleAB = findViewById(R.id.toggle_ab);
                 if (pagePosition == 1)
-                    toggleAB.setChecked(true);
+                    try {
+                        toggleAB.setChecked(true);
+                    } catch (Exception eo) {
+                    }
                 else if (pagePosition == 0)
-                    toggleAB.setChecked(false);
+                    try {
+                        toggleAB.setChecked(false);
+                    } catch (Exception eo) {
+                    }
+
             }
         });
 
@@ -117,23 +124,17 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        // set item as selected to persist highlight
-
-                        //NavigationView navigationView1 = findViewById(R.id.nav_view);
                         Menu menu = navigationView.getMenu();
-
-                        menuItem.setChecked(true);
 
                         switch (menuItem.getItemId()) {
                             case R.id.add_preset:
-                                //newGame();
                                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
                                 menu.add(R.id.presets, 1, 2, "New Preset");
                                 return true;
                             case R.id.select_all:
-                                for (int i = 0; i < listView.getCount(); i++)
+                                for (int i = 0; i < listView.getAdapter().getCount(); i++)
                                     listView.setItemChecked(i, true);
                                 sendMessage(navigationView);
                                 return true;
@@ -151,41 +152,54 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
                                 return true;
                         }
 
-                        if (navigationView.getMenu().getItem(6).isChecked()) {
-                            navigationView.getMenu().getItem(6).setChecked(false);
-                        } else {
-                            navigationView.getMenu().getItem(6).setChecked(true);
+                        for(int i=0; i<menu.size(); i++){
+                            items.add(menu.getItem(i));
                         }
+                        int position=items.indexOf(menuItem);
 
-                        listView.setItemChecked(1, true);
-                        listView.setItemChecked(2, true);
-                        listView.setItemChecked(3, true);
+//                        menu.getItem(8).getActionView().findViewById()
+//                        //menu.getItem(8).getActionView().findViewById(R.id.metrics).setActivated(true);
+//                        menu.getItem(8).getActionView().setActivated(true);
+//                        menuItem.setChecked(true);
+//                        menuItem.getActionView().setActivated(true);
+//                        menu.getItem(position).getActionView().setActivated(true);
 
-                        //Get the Fragment activity and pass the list of parameters
-//                        Intent intent = new Intent(ViewPagerFragmentActivity.this.getApplicationContext(), ViewPagerFragmentActivity.class);
-//                        intent.putParcelableArrayListExtra("fullParameterList", parameterList);
-//                        intent.putExtra("selectedParameterList", navigationView.getMenu().getItem(6).getTitle());
-//                        System.out.println(navigationView.getMenu().getItem(6).getTitle());
-
-
-                        //intent.putParcelableArrayListExtra("selectedParameterList", navigationView.getMenu().getItem(6).getTitle());
-                        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                        //startActivity(intent);
-
-                        // navigationView.getMenu().getItem(6).getActionView().findViewById(R.layout.switch_item));
-//                        menu.findItem(R.id.metrics).getActionView().findViewById(R.id.toggle_ab);
-                        sendMessage(navigationView);
-                        //}
-                        //mDrawerLayout.openDrawer(Gravity);
-                        // close drawer when item is tapped
-                        //mDrawerLayout.closeDrawers();
-
-                        // Add code here to update the UI based on the item selected
-                        // For example, swap UI fragments here
-
+                        if (menuItem.isChecked()) {
+                            menuItem.setChecked(false);
+                            listView.setItemChecked(position - 6, false);
+                        } else {
+                            menuItem.setChecked(true);
+                            listView.setItemChecked(position - 6, true);
+                        }
+                       // menu.add(R.id.metrics, i, Menu.NONE, parameter.getLabel()).setActionView(R.layout.switch_item);
                         return true;
                     }
                 });
+
+        drawer.addDrawerListener(
+                new DrawerLayout.DrawerListener() {
+                    @Override
+                    public void onDrawerSlide(View drawerView, float slideOffset) {
+                        // Respond when the drawer's position changes
+                    }
+
+                    @Override
+                    public void onDrawerOpened(View drawerView) {
+                        // Respond when the drawer is opened
+                    }
+
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+                        // Respond when the drawer is closed
+                        sendMessage(navigationView);
+                    }
+
+                    @Override
+                    public void onDrawerStateChanged(int newState) {
+                        // Respond when the drawer motion state changes
+                    }
+                }
+        );
 
         //Connect to the sensor and load the metrics
         ViewPagerFragmentActivity.Load load = new ViewPagerFragmentActivity.Load();
@@ -344,6 +358,13 @@ public class ViewPagerFragmentActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // Sets proper image for toggleAB on rotation when creating menu
+        if (pager.getCurrentItem() == 1) {
+            toggleAB.setChecked(true);
+        } else if (pager.getCurrentItem() == 0) {
+            toggleAB.setChecked(false);
+        }
 
         return true;
     }

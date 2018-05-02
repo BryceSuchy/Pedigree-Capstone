@@ -2,6 +2,7 @@ package com.pedigreetechnologies.diagnosticview;
 
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,9 +27,21 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+
+import org.supercsv.cellprocessor.Optional;
+import org.supercsv.cellprocessor.ift.CellProcessor;
+import org.supercsv.io.CsvMapWriter;
+import org.supercsv.io.ICsvMapReader;
+import org.supercsv.io.ICsvMapWriter;
+import org.supercsv.prefs.CsvPreference;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TabChartFragment extends Fragment {
 
@@ -151,7 +164,11 @@ public class TabChartFragment extends Fragment {
             createGraphs(currentTime);
 
 
+
         }
+
+
+
         return scrollView;
     }
 
@@ -245,12 +262,12 @@ public class TabChartFragment extends Fragment {
             //Setting view width and height, will be need to be used for dynamic graph size
             Resources r = getResources();
             float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 285, r.getDisplayMetrics());
-            lineChart.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) px));
+            lineChart.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int)px));
 
             // Creating background image for graphs
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
-            shape.setCornerRadii(new float[]{70, 70, 70, 70, 70, 70, 70, 70});
+            shape.setCornerRadii(new float[] {70,70,70,70,70,70,70,70});
             shape.setColor(Color.parseColor(getColorI(i)));
             shape.setAlpha(50);
             lineChart.setBackground(shape);
@@ -260,7 +277,7 @@ public class TabChartFragment extends Fragment {
             graphLinearLayout.addView(lineChart);
 
             // Adds horizontal line below graphs
-            lineView = new View(this.getContext());
+            /*lineView = new View(this.getContext());
             lineView.setVisibility(View.VISIBLE);
             lineView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 80));
             lineView.setBackgroundColor(Color.parseColor("#fafafa"));
@@ -268,7 +285,7 @@ public class TabChartFragment extends Fragment {
 
             if (view.getParent() != null)
                 ((ViewGroup) view.getParent()).removeView(view);
-            graphLinearLayout.addView(view);
+            graphLinearLayout.addView(view);*/
 
 
             //Get the variables for creating the graph
@@ -284,8 +301,8 @@ public class TabChartFragment extends Fragment {
             dataSet.setLineWidth(3f);//was 1.5
             dataSet.setDrawValues(false);
             dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);//new
-            //dataSet.setColor(Color.parseColor(getColorI(i)));
-            dataSet.setColor(Color.BLACK);
+            dataSet.setColor(Color.parseColor(getColorI(i)));
+            //dataSet.setColor(Color.BLACK);
             LineData lineData = new LineData(dataSet);
 
             //Change graph parameters

@@ -1,5 +1,6 @@
 package com.pedigreetechnologies.diagnosticview;
 
+import android.app.Application;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -109,12 +110,12 @@ public class TabGaugeFragment extends Fragment {
                         Resources r = getResources();
                         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, r.getDisplayMetrics());
 
-                        // Creating background image
-                        GradientDrawable shapeG = new GradientDrawable();
-                        shapeG.setShape(GradientDrawable.RECTANGLE);
-                        shapeG.setCornerRadii(new float[]{100, 100, 100, 100, 0, 0, 0, 0});
-                        shapeG.setColor(Color.parseColor(TabChartFragment.getColorI(i)));
-                        shapeG.setAlpha(50);
+                    // Creating background image
+                    GradientDrawable shapeG = new GradientDrawable();
+                    shapeG.setShape(GradientDrawable.RECTANGLE);
+                    shapeG.setCornerRadii(new float[] {100,100,100,100,0,0,0,0});
+                    shapeG.setColor(Color.parseColor("#3A3A3A"));
+                    shapeG.setAlpha(50);
 
                         layoutValue++;
                         String gaugeID = tempParm.getLabel().replaceAll("-%\\s+", "").replaceAll("\\W", "");
@@ -132,12 +133,12 @@ public class TabGaugeFragment extends Fragment {
                         //Set a tag so you know which view is attached to what label
                         view.setTag(tempParm.getLabel());
 
-                        // Creating background image
-                        GradientDrawable shape = new GradientDrawable();
-                        shape.setShape(GradientDrawable.RECTANGLE);
-                        shape.setCornerRadii(new float[]{0, 0, 0, 0, 100, 100, 100, 100});
-                        shape.setColor(Color.parseColor(TabChartFragment.getColorI(i)));
-                        shape.setAlpha(50);
+                    // Creating background image
+                    GradientDrawable shape = new GradientDrawable();
+                    shape.setShape(GradientDrawable.RECTANGLE);
+                    shape.setCornerRadii(new float[] {0,0,0,0,100,100,100,100});
+                    shape.setColor(Color.parseColor("#3A3A3A"));
+                    shape.setAlpha(50);
 
                         // Add gauge name under gauge
                         TextView textView = new TextView(this.getContext());
@@ -278,16 +279,16 @@ public class TabGaugeFragment extends Fragment {
                     // Creating background image
                     GradientDrawable shapeG = new GradientDrawable();
                     shapeG.setShape(GradientDrawable.RECTANGLE);
-                    shapeG.setCornerRadii(new float[]{100, 100, 100, 100, 0, 0, 0, 0});
-                    shapeG.setColor(Color.parseColor(TabChartFragment.getColorI(i)));
+                    shapeG.setCornerRadii(new float[] {100,100,100,100,0,0,0,0});
+                    shapeG.setColor(Color.parseColor("#3A3A3A"));
                     shapeG.setAlpha(50);
 
-                    layoutValue++;
-                    String gaugeID = tempParm.getLabel().replaceAll("-%\\s+", "").replaceAll("\\W", "");
+                    layoutValue ++;
+                    String gaugeID = tempParm.getLabel().replaceAll("-%\\s+","").replaceAll("\\W", "");
                     int resID = getResources().getIdentifier(gaugeID, "id", getActivity().getPackageName());
                     Gauge gauge = relativeLayout.findViewById(resID);
                     gauge.setVisibility(Gauge.VISIBLE);
-                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(((int) ((width / 3) - px)), (int) (width / 3));
+                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(((int)((width / 3) - px)), (int) (width / 3));
                     gauge.setLayoutParams(layoutParams);
                     gauge.setValue(0);
                     gauge.invalidate();
@@ -300,18 +301,18 @@ public class TabGaugeFragment extends Fragment {
                     // Creating background image for graphs
                     GradientDrawable shape = new GradientDrawable();
                     shape.setShape(GradientDrawable.RECTANGLE);
-                    shape.setCornerRadii(new float[]{0, 0, 0, 0, 100, 100, 100, 100});
-                    shape.setColor(Color.parseColor(TabChartFragment.getColorI(i)));
+                    shape.setCornerRadii(new float[] {0,0,0,0,100,100,100,100});
+                    shape.setColor(Color.parseColor("#3A3A3A"));
                     shape.setAlpha(50);
 
                     // Add gauge name under gauge
                     TextView textView = new TextView(this.getContext());
-                    textView.setLayoutParams(new ViewGroup.LayoutParams(((int) ((width / 3) - px)), ViewGroup.LayoutParams.WRAP_CONTENT));
+                    textView.setLayoutParams(new ViewGroup.LayoutParams(((int)((width / 3) - px)), ViewGroup.LayoutParams.WRAP_CONTENT));
                     textView.setText(tempParm.getLabel());
                     textView.setTextColor(Color.BLACK);
                     textView.setMinLines(2);
                     textView.setGravity(Gravity.CENTER);
-                    textView.setPadding(5, 0, 0, 100);
+                    textView.setPadding(5,0,0,100);
                     textView.setBackground(shape);
 
                     //Add the views to the parents left to right
@@ -325,8 +326,8 @@ public class TabGaugeFragment extends Fragment {
                         view = textView;
 
                         // Adds Text
-                        if (view.getParent() != null)
-                            ((ViewGroup) view.getParent()).removeView(view);
+                        if(view.getParent()!=null)
+                            ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutLeft.addView(view);
 
                         // Adds horizontal line below graphs
@@ -336,8 +337,8 @@ public class TabGaugeFragment extends Fragment {
                         lineView.setBackgroundColor(Color.parseColor("#fafafa"));
                         view = lineView;
 
-                        if (view.getParent() != null)
-                            ((ViewGroup) view.getParent()).removeView(view);
+                        if(view.getParent()!=null)
+                            ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutLeft.addView(view);
 
                     } else if (layoutValue % 3 == 1) {
@@ -350,8 +351,8 @@ public class TabGaugeFragment extends Fragment {
                         view = textView;
 
                         // Adds Text
-                        if (view.getParent() != null)
-                            ((ViewGroup) view.getParent()).removeView(view);
+                        if(view.getParent()!=null)
+                            ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutMiddle.addView(view);
 
                         // Adds horizontal line below graphs
@@ -361,10 +362,10 @@ public class TabGaugeFragment extends Fragment {
                         lineView.setBackgroundColor(Color.parseColor("#fafafa"));
                         view = lineView;
 
-                        if (view.getParent() != null)
-                            ((ViewGroup) view.getParent()).removeView(view);
+                        if(view.getParent()!=null)
+                            ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutMiddle.addView(view);
-
+                      
                     } else {
 
                         // Adds gauge
@@ -375,8 +376,8 @@ public class TabGaugeFragment extends Fragment {
                         view = textView;
 
                         // Adds Text
-                        if (view.getParent() != null)
-                            ((ViewGroup) view.getParent()).removeView(view);
+                        if(view.getParent()!=null)
+                            ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutRight.addView(view);
 
                         // Adds horizontal line below graphs
@@ -386,8 +387,8 @@ public class TabGaugeFragment extends Fragment {
                         lineView.setBackgroundColor(Color.parseColor("#fafafa"));
                         view = lineView;
 
-                        if (view.getParent() != null)
-                            ((ViewGroup) view.getParent()).removeView(view);
+                        if(view.getParent()!=null)
+                            ((ViewGroup)view.getParent()).removeView(view);
                         gaugeLayoutRight.addView(view);
 
                     }
